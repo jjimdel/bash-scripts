@@ -3,40 +3,65 @@
 # Title:        js.downolad-links.sh
 # Description:  Downloading links from a text file using youtube-dl
 # Author:       Julio Jimenez Delgado
+#
+# GitHub repo:	https://github.com/jouleSoft/js-sh (stable)
+#		https://github.com/jouleSoft/js-DevOps (testing)
+#
 # License:      The MIT License (MIT)
-#		<https://github.com/jouleSoft/js-ShellScript/blob/master/LICENSE>
-#               Copyright (c) 2020 Julio Jiménez Delgado
+#		<https://github.com/jouleSoft/js-sh/blob/master/LICENSE>
+#               Copyright (c) 2020 Julio Jiménez Delgado (jouleSoft)
 #
-# Template:     js.script-args.sh <https://github.com/jouleSoft/js-ShellScripts/templates/>
+# Template:     js.script-args.sh <https://github.com/jouleSoft/js-DevOps/templates/>
 #
-# Requirements: Arguments
-#		youtube-dl
+# Requirements: Arguments, youtube-dl
 # 
 # Version:      0.1
 # Author:       Julio Jimenez Delgado
-# Date:         <DD/MM/AAAA>
+# Date:         08/10/2019
 # Change:       Initial development
 # 
+# Version:      0.2
+# Author:       Julio Jimenez Delgado
+# Date:         08/11/2019
+# Change:       Checking dependency: youtube-dl
+#
+# Version:      0.3
+# Author:       Julio Jimenez Delgado
+# Date:         13/12/2020
+# Change:       Directory of destination set at '~/Downloads' or '~/' instead
+#
+# Version:      0.4
+# Author:       Julio Jimenez Delgado
+# Date:         15/12/2020
+# Change:       Changing the dependency checking: 'deps_check()' function
 #
 
 #----------------------------------[Declarations and definitions]----------------------------------
 
 #Script info and arguments evaluation variables
 script_name="js.downolad-links.sh"
-version="v.0.1"
+version="v.0.3"
 description="Downloading links from a text file using youtube-dl"
 
-#Total arguments expected / introduced
-args=1
-args_in_array=("$@")
-
-#Arguments arrays: used on the help screen when args_check() function evals '1'.
+#Arguments arrays: used on the help screen when args_check() function evals '1'
 args_array=(
 	"text_file"
-)
+	)
 args_definition_array=(
 	"list of links for downloading"
-)
+	)
+	
+#Total arguments expected / introduced
+args=${#args_array[@]}
+
+#Dependencies array: used for checking the dependencies
+deps_array=(
+	"youtube-dl"
+	)
+
+#Dependencies check array: used in the help screen for enumerating the missing dependencies
+#it will be completed in 'deps_check()' function
+deps_check_array=()
 
 #Global operational variables
 # NONE
@@ -59,7 +84,7 @@ header()
 #Argument control
 args_check() 
 {
-	#When less arguments than expected
+	#When less arguments than expected: help text is shown
 	if [ "$#" -lt $args ]; then
 		echo " More arguments needed."
 		echo "     Expected:   $args"
@@ -77,7 +102,7 @@ args_check()
 
 		args_check_result=1
 
-	#When more arguments than expected
+	#When more arguments than expected: help text is shown
 	elif [ "$#" -gt $args ]; then
 		echo " More arguments than expected."
 		echo "     Expected:   $args"
@@ -93,12 +118,30 @@ args_check()
 		done
 		echo 
         
-		#Less arguments than expected.
 		args_check_result=1
 	
 	#All arguments needed: OK.
 	else
 		args_check_result=0
+	fi
+}
+
+#Dependency control
+deps_check()
+{
+	#Number of software dependencies 
+	local deps="$#"
+
+	#When number of dependencies are more than zero, they will be checked
+	if [[ $deps -gt 0 ]]; then
+		for d in "$@"; do
+			which $d > /dev/null 2>&1
+			#If the dependency in $d is not installed,
+			#it will be stored in '${deps_check_array}'
+			if ! [[ $? -eq 0 ]]; then
+				deps_check_array+=("$d") 
+			fi
+		done
 	fi
 }
 
@@ -113,9 +156,9 @@ main()
 	local count_lines=1
 	local error_code=0
 
-	if [ ! -e /home/jjimenez/Descargas ]; then
+	if [ -e $HOME/Descargas ]; then
 		OUTPUT="$HOME/Descargas"
-	elif [ ! -e /home/jjimenez/Downloads ]; then
+	elif [ -e $HOME/Downloads ]; then
 		OUTPUT="$HOME/Downloads"
 	else
 		OUTPUT="$HOME"
@@ -144,17 +187,29 @@ main()
 #Printing the header
 header
 
+#Dependency evalutation
+deps_check ${deps_array[@]}
+
 #Arguments number evaluation
-args_check ${args_in_array[@]}
+if [[ ${#deps_check_array[@]} -eq 0 ]]; then
+	args_check "$@"
+else
+	echo "The dependencies listed below are needed:"
+	for e in ${deps_check_array[@]}; do
+		echo "     $e"
+	done
+
+	echo
+
+	#If there are not all the dependencies, the main function will be skipped
+	args_check_result=1
+fi
 
 if [ $args_check_result -eq 0 ]; then
-
-	which youtube-dl > /dev/null
-
-	if [[ $? -eq 0 ]] && [ -e "$1" ]; then
+	if [ -e "$1" ]; then
 		main "$@"
 	else
-		echo -e "\n youtube-dl is not installed or 'text_file' is not in the system.\n"
+		echo -e "\n 'text_file' is not in the system.\n"
 	fi
 fi
 
@@ -167,10 +222,13 @@ unset description
 
 #Argument evaluation
 unset args
-unset args_in_array
 unset args_array
 unset args_definition_array
 unset args_check_result
+
+#Dependency evaluation
+unset deps_check_array
+unset deps_array
 
 #Operational variables (if any)
 #
