@@ -40,7 +40,7 @@
 
 #Script info and arguments evaluation variables
 script_name="js.downolad-links.sh"
-version="v.0.3"
+version="v.0.4"
 description="Downloading links from a text file using youtube-dl"
 
 #Arguments arrays: used on the help screen when args_check() function evals '1'
