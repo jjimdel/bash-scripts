@@ -5,10 +5,10 @@
 # Author:       Julio Jimenez Delgado
 #
 # GitHub repo:	https://github.com/jouleSoft/js-sh (stable)
-#		https://github.com/jouleSoft/js-DevOps (testing)
+#				https://github.com/jouleSoft/js-DevOps (testing)
 #
 # License:      The MIT License (MIT)
-#		<https://github.com/jouleSoft/js-sh/blob/master/LICENSE>
+#				<https://github.com/jouleSoft/js-sh/blob/master/LICENSE>
 #               Copyright (c) 2020 Julio Jiménez Delgado (jouleSoft)
 #
 # Template:     js.script-args.sh <https://github.com/jouleSoft/js-DevOps/templates/>
@@ -35,20 +35,27 @@
 # Date:         15/12/2020
 # Change:       Changing the dependency checking: 'deps_check()' function
 #
+# Version:      0.5
+# Author:       Julio Jimenez Delgado
+# Date:         15/12/2020
+# Change:       Output directory needs to be explicitly typed as an argument
+#
 
 #----------------------------------[Declarations and definitions]----------------------------------
 
 #Script info and arguments evaluation variables
 script_name="js.downolad-links.sh"
-version="v.0.4"
+version="v.0.5"
 description="Downloading links from a text file using youtube-dl"
 
 #Arguments arrays: used on the help screen when args_check() function evals '1'
 args_array=(
 	"text_file"
+	"output_dir"
 	)
 args_definition_array=(
 	"list of links for downloading"
+	"output directory where files are going to be downloaded"
 	)
 	
 #Total arguments expected / introduced
@@ -156,14 +163,17 @@ main()
 	local count_lines=1
 	local error_code=0
 
-	if [ -e $HOME/Descargas ]; then
-		OUTPUT="$HOME/Descargas"
-	elif [ -e $HOME/Downloads ]; then
-		OUTPUT="$HOME/Downloads"
-	else
-		OUTPUT="$HOME"
+	if [ ! -e "$2" ]; then
+		#if output directory doesn't exists. Create it
+		echo "$2 Directory doesn't exist. Creating..."
+		mkdir -p "$2"
+		if [[ $? -eq 0 ]]; then
+			echo "Directory created successfuly"
+		fi
 	fi
-	
+
+	OUTPUT="$2"
+
 	for l in $(cat $lnk_file) 
 	do 
 		printf "\n${YELLOW} Link $count_lines / $total_lines${NC}\n\n"
@@ -207,6 +217,14 @@ fi
 
 if [ $args_check_result -eq 0 ]; then
 	if [ -e "$1" ]; then
+		if [ ! -e "$2" ]; then
+			#if output directory doesn't exists. Create it
+			echo "$2 Directory doesn't exist. Creating..."
+			mkdir -p "$2"
+			if [[ $? -eq 0 ]]; then
+				echo "Directory created successfuly"
+			fi
+		fi
 		main "$@"
 	else
 		echo -e "\n 'text_file' is not in the system.\n"
