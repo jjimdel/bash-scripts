@@ -217,14 +217,6 @@ fi
 
 if [ $args_check_result -eq 0 ]; then
 	if [ -e "$1" ]; then
-		if [ ! -e "$2" ]; then
-			#if output directory doesn't exists. Create it
-			echo "$2 Directory doesn't exist. Creating..."
-			mkdir -p "$2"
-			if [[ $? -eq 0 ]]; then
-				echo "Directory created successfuly"
-			fi
-		fi
 		main "$@"
 	else
 		echo -e "\n 'text_file' is not in the system.\n"
