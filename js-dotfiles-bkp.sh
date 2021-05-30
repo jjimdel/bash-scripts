@@ -17,20 +17,22 @@
 # By:           Julio Jimenez Delgado
 # Date:         30/05/2021
 # Change:       Initial development
-# 
+#
+# Version:      0.2
+# By:           Julio Jimenez Delgado
+# Date:         30/05/2021
+# Change:       Check GIT status of all dotfile repos
+#
 #
 
 #----------------------------------[Declarations and definitions]----------------------------------
 
 #Script info and arguments evaluation variables
-script_name="js-dotfiles-bkp.sh"
-version="v.0.1"
-description="Create dotfiles backup"
+declare script_name="js-dotfiles-bkp.sh"
+declare version="v.0.1"
+declare description="Create dotfiles backup"
 
 #Global operational variables
-#Repo path
-repo="$HOME/github/dotfiles"
-
 #dotfiles from '~/' directory
 declare -a dotFiles=(
 ".bashrc"
@@ -53,9 +55,9 @@ declare -a dotConfig=(
 header() 
 {
 	#Init color variables
-	local NC='\033[0m'
-	local LIGHT_GREY='\033[0;37m'
-	local YELLOW='\033[1;33m'
+	declare NC='\033[0m'
+	declare LIGHT_GREY='\033[0;37m'
+	declare YELLOW='\033[1;33m'
 
 	echo 
 	echo -e "${LIGHT_GREY} $script_name ${YELLOW}$version ${LIGHT_GREY}- $description${NC}\n"
@@ -65,20 +67,49 @@ header()
 #Operational functions (if required)
 gitCheck()
 {
-	local currentDir
+	declare -a gitRepos
+
+	declare currentDir
+	declare NC
+	declare LIGHT_GREEN
+
+	NC='\033[0m'
+	LIGHT_GREEN='\033[1;32m'
+
+	gitRepos=(
+	"$HOME/.config/i3"
+	"$HOME/.config/polybar"
+	"$HOME/.config/qtile"
+	"$HOME/github/dotfiles"
+	"$HOME/.vim"
+	)
+
 	currentDir="$(pwd)"
 
-	cd "$repo" && echo "GIT status of [$(pwd)]"; echo; git status --short || echo "$repo doesn't exist"
-	cd "$currentDir" || echo "$currentDir doesn't exsit"
+	for g in "${gitRepos[@]}"; do
+		if cd "$g"; then
+			echo -e "${LIGHT_GREEN}GIT status of [$(pwd)]${NC}"
+			echo "---"
+			git status --short
+			echo "---"
+		else
+			echo "$g doesn't exist"
+		fi
+	done
 
+	cd "$currentDir" || echo "$currentDir doesn't exsit"
 }
 
 #Main function
 main()
 {
-	local NC='\033[0m'
-	local LIGHT_GREEN='\033[1;32m'
-	local YELLOW='\033[1;33m'
+	#Color variables
+	declare NC='\033[0m'
+	declare LIGHT_GREEN='\033[1;32m'
+	declare YELLOW='\033[1;33m'
+
+	#Repo path
+	declare repo="$HOME/github/dotfiles"
 
 	#Only dotfiles from '~/' directory
 	for d in "${dotFiles[@]}"; do
