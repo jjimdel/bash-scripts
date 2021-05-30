@@ -11,7 +11,7 @@
 #
 # Template:     template_noargs.sh <https://github.com/jouleSoft/js-DevOps/templates/>
 #
-# Dependencies: None
+# Dependencies: git
 # 
 # Version:      0.1
 # By:           Julio Jimenez Delgado
@@ -33,18 +33,18 @@ repo="$HOME/github/dotfiles"
 
 #dotfiles from '~/' directory
 declare -a dotFiles=(
-"$HOME/.bashrc"
+".bashrc"
 )
 
 #dotfiles from '~/.config' directory
 declare -a dotConfig=(
-"$HOME/.config/alacritty"
-"$HOME/.config/dunst"
-"$HOME/.config/fish"
-"$HOME/.config/i3status-rust"
-"$HOME/.config/kitty"
-"$HOME/.config/picom.conf"
-"$HOME/.config/ranger"
+"alacritty"
+"dunst"
+"fish"
+"i3status-rust"
+"kitty"
+"picom.conf"
+"ranger"
 )
 
 #-------------------------------------------[Functions]--------------------------------------------
@@ -53,9 +53,9 @@ declare -a dotConfig=(
 header() 
 {
 	#Init color variables
-	NC='\033[0m'
-	LIGHT_GREY='\033[0;37m'
-	YELLOW='\033[1;33m'
+	local NC='\033[0m'
+	local LIGHT_GREY='\033[0;37m'
+	local YELLOW='\033[1;33m'
 
 	echo 
 	echo -e "${LIGHT_GREY} $script_name ${YELLOW}$version ${LIGHT_GREY}- $description${NC}\n"
@@ -63,24 +63,52 @@ header()
 }
 
 #Operational functions (if required)
-#
+gitCheck()
+{
+	local currentDir
+	currentDir="$(pwd)"
+
+	cd "$repo" && echo "GIT status of [$(pwd)]"; echo; git status --short || echo "$repo doesn't exist"
+	cd "$currentDir" || echo "$currentDir doesn't exsit"
+
+}
 
 #Main function
 main()
 {
+	local NC='\033[0m'
+	local LIGHT_GREEN='\033[1;32m'
+	local YELLOW='\033[1;33m'
+
 	#Only dotfiles from '~/' directory
 	for d in "${dotFiles[@]}"; do
 		#Copy .bashrc
-		[ "$d" == "$HOME/.bashrc" ] && cp -f "$d" "$repo/bashrc" && echo "$d copied"
+		if [ "$HOME/$d" == "$HOME/.bashrc" ]; then
+			#if there is no differences between the dotFile source and the repo,
+			#the file or directory won't be copied
+			if diff "$HOME/$d" "$repo/bashrc"; then
+				echo -e "${LIGHT_GREEN}[ OK ]${NC} $d"
+			else
+				cp -f "$HOME/$d" "$repo/bashrc" && echo -e "${YELLOW}[ copied ]${NC} $d"
+			fi
+		fi
 	done
 
 	#Dotfiles from '~/.config' directory
 	for c in "${dotConfig[@]}"; do
-		cp -rf "$c" "$repo/config/" && echo "$c copied"
+		#if there is no differences between the dotConfig source and the repo,
+		#the file or directory won't be copied
+		if diff "$HOME/.config/$c" "$repo/config/$c"; then
+			echo -e "${LIGHT_GREEN}[ OK ]${NC} .config/$c"
+		else
+			cp -rf "$HOME/.config/$c" "$repo/config/" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
+		fi
 	done
 
 	echo
 	echo "Backup done"
+	echo
+	gitCheck
 	echo
 }
 
@@ -102,5 +130,5 @@ unset version
 unset description
 
 #Operational variables (if any)
-#
-
+unset dotFiles
+unset dotConfig
