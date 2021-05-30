@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ---
 # Title:        js.bkp.sh
-# Description:  Create a directory backup
+# Description:  Create a simple file/directory backup
 # Author:       Julio Jimenez Delgado
 #
 # GitHub repo:	https://github.com/jouleSoft/js-sh (stable)
@@ -19,15 +19,25 @@
 # Author:       Julio Jimenez Delgado
 # Date:         16/01/2021
 # Change:       Initial development
-# 
+#
+# Version:      0.2
+# Author:       Julio Jimenez Delgado
+# Date:         23/01/2021
+# Change:       Declarations and definitions
+# 					- 'description' variable: description test changed
+#				Functions
+#					- Main function:
+#					   * Create a directory per day where the backups
+#					     are going to be stored.
+#					   * Create a log file where log the original target path
 #
 
 #----------------------------------[Declarations and definitions]----------------------------------
 
 #Script info and arguments evaluation variables
 script_name="js.bkp.sh"
-version="v.0.1"
-description="Create a directory backup"
+version="v.0.2"
+description="Create a simple file/directory backup"
 
 #Arguments arrays: used on the help screen when args_check() function evals '1'.
 args_array=(
@@ -35,7 +45,7 @@ args_array=(
 	"backup_dir"
 	)
 args_definition_array=(
-	"Path of the target directory"
+	"Path of the target"
 	"path to destination directory to make the backup"
 	)
 
@@ -138,15 +148,36 @@ deps_check()
 #Main function
 main()
 {
-	if [ -e "$2/$(date +%Y%m%d).$(basename $1)" ]; then
-		echo " Today's backup already exists"
-	else
-		cp -r "$1" "$2/$(date +%Y%m%d).$(basename $1)"
+	#File where write the original paths for
+	#helping in case of necessity of recovery
+	local content_flog="backup_trace.log"
+
+	#If not exists, create a directory named by date
+	if [ ! -e "$2/$(date +%Y%m%d)" ]; then
+		mkdir "$2/$(date +%Y%m%d)"
+	fi
+
+	#If not exists yet, copy target file / directory
+	if [ ! -e "$2/$(date +%Y%m%d)/_$(basename $1)" ]; then
+		cp -r "$1" "$2/$(date +%Y%m%d)/_$(basename $1)"
+
+		#Evaluate if target is a file or a directory
+		if [ -d "$1" ]; then
+			local ftype="d"
+		elif [ -f "$1" ]; then
+			local ftype="f"
+		fi
+
+		#Log target's orginal path indicating if it is a file or a directory
+		printf "$(date +%F' '%T) :: ($ftype)[$(basename $1)] :\t $1\n" >> "$2/$(date +%Y%m%d)/$content_flog"
+
 		if [ "$?" -eq 0 ]; then
 			echo " Backup done!"
 		else
 			echo " A problem occuried (err: $?)"
 		fi
+	else
+		echo " The backup already exists. No files copied"
 	fi
 
 	echo

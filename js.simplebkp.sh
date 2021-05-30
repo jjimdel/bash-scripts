@@ -9,7 +9,7 @@
 #
 # License:      The MIT License (MIT)
 #		        <https://github.com/jouleSoft/js-sh/blob/master/LICENSE>
-#               Copyright (c) <YEAR> Julio Jiménez Delgado (jouleSoft)
+#               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
 #
 # Template:     template_args.dep.sh <https://github.com/jouleSoft/js-DevOps/templates/>
 #

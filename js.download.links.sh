@@ -84,7 +84,7 @@ header()
 	YELLOW='\033[1;33m'
 
 	echo 
-	printf "${LIGHT_GREY} $script_name ${YELLOW}$version ${LIGHT_GREY}- $description${NC}\n"
+	echo -e "${LIGHT_GREY} $script_name ${YELLOW}$version ${LIGHT_GREY}- $description${NC}\n"
 	echo 
 }
 
@@ -92,7 +92,7 @@ header()
 args_check() 
 {
 	#When less arguments than expected: help text is shown
-	if [ "$#" -lt $args ]; then
+	if [ "$#" -lt "$args" ]; then
 		echo " More arguments needed."
 		echo "     Expected:   $args"
 		echo "     Intruduced: $#"
@@ -101,7 +101,7 @@ args_check()
 		echo "     $script_name ${args_array[*]}"
 		echo 
 		echo " Where:"
-		for (( i=0; i<$args; i++ ))
+		for (( i=0; i<args; i++ ))
 		do
 			echo "     ${args_array[$i]} - ${args_definition_array[$i]}"
 		done
