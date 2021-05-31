@@ -4,7 +4,7 @@
 # Description:  Create dotfiles backup
 # Contributors: Julio Jimenez Delgado
 #
-# GitHub repo:	https://github.com/jouleSoft/js-DevOps
+# GitHub repo:	https://github.com/jouleSoft/js-sh
 #
 # License:      The MIT License (MIT)
 #               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
