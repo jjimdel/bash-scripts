@@ -4,7 +4,7 @@
 # Description:  Create dotfiles backup
 # Contributors: Julio Jimenez Delgado
 #
-# GitHub repo:	https://github.com/jouleSoft/js-sh
+# GitHub repo:	https://github.com/jouleSoft/js-DevOps
 #
 # License:      The MIT License (MIT)
 #               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
@@ -22,6 +22,11 @@
 # By:           Julio Jimenez Delgado
 # Date:         30/05/2021
 # Change:       Check GIT status of all dotfile repos
+#
+# Version:      0.3
+# By:           Julio Jimenez Delgado
+# Date:         01/06/2021
+# Change:       Redirect diff output to /dev/null
 #
 #
 
@@ -111,14 +116,16 @@ main()
 	#Repo path
 	declare repo="$HOME/github/dotfiles"
 
+	echo "Backup to: [$HOME/github/dotfiles]"
+	echo "-------------------------------------------"
 	#Only dotfiles from '~/' directory
 	for d in "${dotFiles[@]}"; do
 		#Copy .bashrc
 		if [ "$HOME/$d" == "$HOME/.bashrc" ]; then
 			#if there is no differences between the dotFile source and the repo,
 			#the file or directory won't be copied
-			if diff "$HOME/$d" "$repo/bashrc"; then
-				echo -e "${LIGHT_GREEN}[ OK ]${NC} $d"
+			if diff -q "$HOME/$d" "$repo/bashrc" > /dev/null; then
+				echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
 			else
 				cp -f "$HOME/$d" "$repo/bashrc" && echo -e "${YELLOW}[ copied ]${NC} $d"
 			fi
@@ -129,15 +136,14 @@ main()
 	for c in "${dotConfig[@]}"; do
 		#if there is no differences between the dotConfig source and the repo,
 		#the file or directory won't be copied
-		if diff "$HOME/.config/$c" "$repo/config/$c"; then
-			echo -e "${LIGHT_GREEN}[ OK ]${NC} .config/$c"
+		if diff -q "$HOME/.config/$c" "$repo/config/$c" > /dev/null; then
+			echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
 		else
 			cp -rf "$HOME/.config/$c" "$repo/config/" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
 		fi
 	done
 
-	echo
-	echo "Backup done"
+	echo "-------------------------------------------"
 	echo
 	gitCheck
 	echo
