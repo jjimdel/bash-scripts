@@ -17,7 +17,12 @@
 # By:           Julio Jimenez Delgado
 # Date:         30/05/2021
 # Change:       Initial development
-# 
+#
+# Version:      0.2
+# By:           Julio Jimenez Delgado
+# Date:         30/05/2021
+# Change:       Check if there are differences between devel and prod scripts
+#
 #
 
 #----------------------------------[Declarations and definitions]----------------------------------
@@ -92,10 +97,14 @@ shCheck()
 	declare NC
 	declare LIGHT_GREY
 	declare YELLOW
+	declare PURPLE
+	declare LIGHT_GREEN
 
 	NC='\033[0m'
 	LIGHT_GREY='\033[0;37m'
 	YELLOW='\033[1;33m'
+	PURPLE='\033[0;35m'
+	LIGHT_GREEN='\033[1;32m'
 
 	#Declare file and directory variables
 	declare develFiles
@@ -117,7 +126,7 @@ shCheck()
 	if [ ! "$(echo "$develFiles"|wc -l)" -eq "$(echo "$prodFiles"|wc -l)" ]; then
 		echo -e "${YELLOW}js-DevOps (sh):${NC} $(echo "$develFiles"|wc -l) <--> ${YELLOW}js-sh:${NC} $(echo "$prodFiles"|wc -l)"
 	else
-		echo -e "${LIGHT_GREY}js-DevOps (sh):${NC} $(echo "$develFiles"|wc -l) <--> ${LIGHT_GREY}js-sh:${NC} $(echo "$prodFiles"|wc -l)"
+		echo -e "${LIGHT_GREEN}js-DevOps (sh):${NC} $(echo "$develFiles"|wc -l) <-->  $(echo "$prodFiles"|wc -l) ${LIGHT_GREEN}:js-sh${NC}"
 	fi
 
 	echo "-----"
@@ -127,7 +136,14 @@ shCheck()
 			[ "$d" == "$p" ] && ((counter++))
 		done
 
-		[ "$counter" -eq 0 ] && echo -e "${YELLOW}[ N ]${NC} $d" || echo "[ Y ] $d"
+		if [ "$counter" -eq 0 ]; then
+			echo -e "${YELLOW}[ N ]${NC} $d"
+		else
+			diff "$develDir/$d" "$prodDir/$p" > /dev/null && echo -e "${PURPLE}[ S ]${NC} $d" || echo "[ Y ] $d"
+		fi
+
+		# If counter is 1, then the file exists. Thus we could check diffs and show wether
+		# they are differents
 
 		counter=0
 	done

@@ -28,13 +28,18 @@
 # Date:         01/06/2021
 # Change:       Redirect diff output to /dev/null
 #
+# Version:      0.4
+# By:           Julio Jimenez Delgado
+# Date:         12/06/2021
+# Change:       Conky dotfile added
+#
 #
 
 #----------------------------------[Declarations and definitions]----------------------------------
 
 #Script info and arguments evaluation variables
 declare script_name="js-dotfiles-bkp.sh"
-declare version="v.0.1"
+declare version="v.0.4"
 declare description="Create dotfiles backup"
 
 #Global operational variables
@@ -46,6 +51,7 @@ declare -a dotFiles=(
 #dotfiles from '~/.config' directory
 declare -a dotConfig=(
 "alacritty"
+"conky"
 "dunst"
 "fish"
 "i3status-rust"
