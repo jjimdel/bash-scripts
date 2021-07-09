@@ -56,17 +56,37 @@ declare -a dotFiles=(
 
 #dotfiles from '~/.config' directory
 declare -a dotConfig=(
-"alacritty"
-"conky"
-"dunst"
-"fish"
-"i3status-rust"
-"i3"
-"kitty"
+"alacritty/alacritty.yml"
+"alacritty/dracula.yml"
+"alacritty/template.yml"
+"conky/conky.conf"
+"dunst/dunstrc"
+"fish/config.fish"
+"fish/fish_variables"
+"i3status-rust/config.toml"
+"i3/config"
+"i3/dmApplications.sh"
+"i3/dmConfig.sh"
+"i3/dmDocs.sh"
+"i3/dmScripts.sh"
+"i3/dmUrl.sh"
+"i3/dunstify-volume.sh"
+"i3/pctl-playPause.sh"
+"i3/umenu-term-apps.sh"
+"kitty/diff.conf"
+"kitty/dracula.conf"
+"kitty/kitty.conf"
 "picom.conf"
-"polybar"
-"qtile"
-"ranger"
+"polybar/config"
+"polybar/launch.sh"
+"polybar/spotify_status.py"
+"qtile/config.py"
+"qtile/autostart.sh"
+"ranger/commands.py"
+"ranger/commands_full.py"
+"ranger/rc.conf"
+"ranger/rifle.conf"
+"ranger/scope.sh"
 )
 
 #-------------------------------------------[Functions]--------------------------------------------
@@ -127,22 +147,12 @@ main()
   echo "-------------------------------------------"
   #Only dotfiles from '~/' directory
   for d in "${dotFiles[@]}"; do
-    #Copy .bashrc
-    if [ "$HOME/$d" == "$HOME/.bashrc" ]; then
-      #if there is no differences between the dotFile source and the repo,
-      #the file or directory won't be copied
-      if diff -q "$HOME/$d" "$repo/.bashrc" > /dev/null; then
-        echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
-      else
-        cp -f "$HOME/$d" "$repo/.bashrc" && echo -e "${YELLOW}[ copied ]${NC} $d"
-      fi
-
-    elif [ "$HOME/$d" == "$HOME/.vim" ]; then
-      if diff -q "$HOME/$d/vimrc" "$repo/.vim/vimrc" > /dev/null; then
-        echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
-      else
-        cp -f "$HOME/$d/vimrc" "$repo/.vim/vimrc" && echo -e "${YELLOW}[ copied ]${NC} $d"
-      fi
+    #if there is no differences between the dotFile source and the repo,
+    #the file or directory won't be copied
+    if diff -q "$HOME/$d" "$repo/$d" > /dev/null; then
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+    else
+      cp -f "$HOME/$d" "$repo/$d" && echo -e "${YELLOW}[ copied ]${NC} $d"
     fi
   done
 
@@ -153,7 +163,7 @@ main()
     if diff -q "$HOME/.config/$c" "$repo/.config/$c" > /dev/null; then
       echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
     else
-      cp -rf "$HOME/.config/$c" "$repo/.config/" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
+      cp -rf "$HOME/.config/$c" "$repo/.config/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
     fi
   done
 
