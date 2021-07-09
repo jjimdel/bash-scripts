@@ -131,10 +131,10 @@ main()
     if [ "$HOME/$d" == "$HOME/.bashrc" ]; then
       #if there is no differences between the dotFile source and the repo,
       #the file or directory won't be copied
-      if diff -q "$HOME/$d" "$repo/bashrc" > /dev/null; then
+      if diff -q "$HOME/$d" "$repo/.bashrc" > /dev/null; then
         echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
       else
-        cp -f "$HOME/$d" "$repo/bashrc" && echo -e "${YELLOW}[ copied ]${NC} $d"
+        cp -f "$HOME/$d" "$repo/.bashrc" && echo -e "${YELLOW}[ copied ]${NC} $d"
       fi
 
     elif [ "$HOME/$d" == "$HOME/.vim" ]; then
