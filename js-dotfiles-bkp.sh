@@ -87,6 +87,7 @@ declare -a dotConfig=(
 "ranger/rc.conf"
 "ranger/rifle.conf"
 "ranger/scope.sh"
+"starship.toml"
 )
 
 #-------------------------------------------[Functions]--------------------------------------------
