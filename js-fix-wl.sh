@@ -56,21 +56,23 @@ header()
 	echo 
 }
 
-#Operational functions (if required)
-#
+#Operational functions
+reload_module()
+{
+  rmmod wl || echo "rmmod wl: failed"
+  rmmod cfg80211 || echo "rmmod cfg80211: failed"
+  modprobe wl || echo "modprobe wl: failed"
+  echo
+}
 
 #Main function
 main()
 {
-  echo
   if [ "$(id -u)" != 0 ]; then
-    echo -e "only root user\n"
+    echo -e "${YELLOW} only root user${NC}\n"
   else
-    rmmod wl
-    rmmod cfg80211
-    modprobe wl
+    reload_module
   fi
-  echo
 }
 
 #-------------------------------------------[Execution]--------------------------------------------
