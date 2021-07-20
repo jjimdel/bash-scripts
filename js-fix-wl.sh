@@ -11,12 +11,12 @@
 #
 # Template:     noargs.sh <https://github.com/jouleSoft/js-templates>
 #
-# Dependencies: <dependency1>
-#               <dependency2>
+# Dependencies: root access
+#               wl module
 # 
 # Version:      0.1
 # By:           Julio Jimenez Delgado
-# Date:         <DD/MM/AAAA>
+# Date:         20-07-2021
 # Change:       Initial development
 # 
 #
@@ -28,9 +28,9 @@ declare script_name
 declare version
 declare description
 
-script_name=""
+script_name="js-fix-wl.sh"
 version="v0.1"
-description=""
+description="Reload wl kernel module so that the kernel can start it again"
 
 #Global operational variables
 # NONE
@@ -56,15 +56,23 @@ header()
 	echo 
 }
 
-#Operational functions (if required)
-#
+#Operational functions
+reload_module()
+{
+  rmmod wl || echo "rmmod wl: failed"
+  rmmod cfg80211 || echo "rmmod cfg80211: failed"
+  modprobe wl || echo "modprobe wl: failed"
+  echo
+}
 
 #Main function
 main()
 {
-	echo
-	#Write main code block here!!
-	echo
+  if [ "$(id -u)" != 0 ]; then
+    echo -e "${YELLOW} only root user${NC}\n"
+  else
+    reload_module
+  fi
 }
 
 #-------------------------------------------[Execution]--------------------------------------------
