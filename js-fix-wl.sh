@@ -11,12 +11,12 @@
 #
 # Template:     noargs.sh <https://github.com/jouleSoft/js-templates>
 #
-# Dependencies: <dependency1>
-#               <dependency2>
+# Dependencies: root access
+#               wl module
 # 
 # Version:      0.1
 # By:           Julio Jimenez Delgado
-# Date:         <DD/MM/AAAA>
+# Date:         20-07-2021
 # Change:       Initial development
 # 
 #
@@ -62,9 +62,15 @@ header()
 #Main function
 main()
 {
-	echo
-	#Write main code block here!!
-	echo
+  echo
+  if [ "$(id -u)" != 0 ]; then
+    echo -e "only root user\n"
+  else
+    rmmod wl
+    rmmod cfg80211
+    modprobe wl
+  fi
+  echo
 }
 
 #-------------------------------------------[Execution]--------------------------------------------
