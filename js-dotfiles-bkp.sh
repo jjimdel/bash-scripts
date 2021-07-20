@@ -64,6 +64,7 @@ declare -a dotConfig=(
 "fish/config.fish"
 "fish/fish_variables"
 "i3status-rust/config.toml"
+"i3status/config"
 "i3/config"
 "i3/dmApplications.sh"
 "i3/dmConfig.sh"
