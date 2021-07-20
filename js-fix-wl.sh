@@ -28,9 +28,9 @@ declare script_name
 declare version
 declare description
 
-script_name=""
+script_name="js-fix-wl.sh"
 version="v0.1"
-description=""
+description="Reload wl kernel module so that the kernel can start it again"
 
 #Global operational variables
 # NONE
