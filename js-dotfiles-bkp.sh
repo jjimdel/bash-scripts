@@ -38,13 +38,17 @@
 # Date:         09/07/2021
 # Change:       Now 'dotfiles' repo will be the only repo for all the files
 #
+# Version:      0.6
+# By:           Julio Jimenez Delgado
+# Date:         04/08/2021
+# Change:       Auto update commit and push
 #
 
 #----------------------------------[Declarations and definitions]----------------------------------
 
 #Script info and arguments evaluation variables
 declare script_name="js-dotfiles-bkp.sh"
-declare version="v.0.5"
+declare version="v.0.6"
 declare description="Create dotfiles backup"
 
 #Global operational variables
@@ -107,28 +111,103 @@ header()
 }
 
 #Operational functions (if required)
-gitCheck()
+# gitCheck()
+# {
+#   declare gitRepo
+# 
+#   declare currentDir
+#   declare NC
+#   declare LIGHT_GREEN
+# 
+#   NC='\033[0m'
+#   LIGHT_GREEN='\033[1;32m'
+# 
+#   gitRepo="$HOME/github/dotfiles"
+# 
+#   currentDir="$(pwd)"
+# 
+#   if cd "$gitRepo"; then
+#     echo -e "${LIGHT_GREEN}GIT status of [$(pwd)]${NC}"
+#     echo "---"
+#     git status --short
+#     echo "---"
+#   else
+#     echo "$gitRepo doesn't exist"
+#   fi
+# 
+#   cd "$currentDir" || echo "$currentDir doesn't exsit"
+# }
+
+copyDotfiles_fromHome()
 {
-  declare gitRepo
+  #Only dotfiles from '~/' directory
+
+  for d in "${dotFiles[@]}"; do
+    #if there is no differences between the dotFile source and the repo,
+    #the file or directory won't be copied
+
+    if diff -q "$HOME/$d" "$repo/$d" > /dev/null; then
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+    else
+      cp -f "$HOME/$d" "$repo/$d" && echo -e "${YELLOW}[ copied ]${NC} $d"
+    fi
+  done
+}
+
+copyDotfiles_fromHomeDotConfig()
+{
+  #Dotfiles from '~/.config' directory
+  
+  for c in "${dotConfig[@]}"; do
+    #if there is no differences between the dotConfig source and the repo,
+    #the file or directory won't be copied
+
+    if diff -q "$HOME/.config/$c" "$repo/.config/$c" > /dev/null; then
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
+    else
+      cp -rf "$HOME/.config/$c" "$repo/.config/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
+    fi
+  done
+}
+
+gitCheck_and_commit()
+{
+  if [ -e "$HOME/github/dotfiles" ]; then
+    declare gitRepo
+    gitRepo="$HOME/github/dotfiles"
+  else
+    exit 1
+  fi
 
   declare currentDir
-  declare NC
-  declare LIGHT_GREEN
-
-  NC='\033[0m'
-  LIGHT_GREEN='\033[1;32m'
-
-  gitRepo="$HOME/github/dotfiles"
-
   currentDir="$(pwd)"
+
+  #declare NC
+  #NC='\033[0m'
+
+  #declare LIGHT_GREEN
+  #LIGHT_GREEN='\033[1;32m'
 
   if cd "$gitRepo"; then
     echo -e "${LIGHT_GREEN}GIT status of [$(pwd)]${NC}"
     echo "---"
     git status --short
     echo "---"
+
+    if git add . && git commit -m "backup" > /dev/null; then 
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} commit"
+    else
+      echo -e "${RED}[   KO   ]${NC} commit"
+    fi
+
+    if git push -q > /dev/null; then
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} push"
+    else
+      echo -e "${RED}[   KO   ]${NC} push"
+    fi
+
   else
-    echo "$gitRepo doesn't exist"
+    echo "$gitRepo doesn't exist or it can't be openned"
   fi
 
   cd "$currentDir" || echo "$currentDir doesn't exsit"
@@ -138,41 +217,30 @@ gitCheck()
 main()
 {
   #Color variables
-  declare NC='\033[0m'
-  declare LIGHT_GREEN='\033[1;32m'
-  declare YELLOW='\033[1;33m'
+  declare NC
+  NC='\033[0m'
+
+  declare LIGHT_GREEN
+  LIGHT_GREEN='\033[1;32m'
+  
+  declare YELLOW
+  YELLOW='\033[1;33m'
+
+  declare RED
+  RED='\033[0;31m'
 
   #Repo path
-  declare repo="$HOME/github/dotfiles"
+  declare repo
+  repo="$HOME/github/dotfiles"
 
   echo "Backup to: [$HOME/github/dotfiles]"
   echo "-------------------------------------------"
-  #Only dotfiles from '~/' directory
-  for d in "${dotFiles[@]}"; do
-    #if there is no differences between the dotFile source and the repo,
-    #the file or directory won't be copied
-    if diff -q "$HOME/$d" "$repo/$d" > /dev/null; then
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
-    else
-      cp -f "$HOME/$d" "$repo/$d" && echo -e "${YELLOW}[ copied ]${NC} $d"
-    fi
-  done
-
-  #Dotfiles from '~/.config' directory
-  for c in "${dotConfig[@]}"; do
-    #if there is no differences between the dotConfig source and the repo,
-    #the file or directory won't be copied
-    if diff -q "$HOME/.config/$c" "$repo/.config/$c" > /dev/null; then
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
-    else
-      cp -rf "$HOME/.config/$c" "$repo/.config/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
-    fi
-  done
-
+  copyDotfiles_fromHome
+  copyDotfiles_fromHomeDotConfig
   echo "-------------------------------------------"
   echo
 
-  gitCheck
+  gitCheck_and_commit
 
   echo
 }
