@@ -4,7 +4,7 @@
 # Description:  Create dotfiles backup
 # Contributors: Julio Jimenez Delgado
 #
-# GitHub repo:	https://github.com/jouleSoft/js-DevOps
+# GitHub repo:  https://github.com/jouleSoft/js-DevOps
 #
 # License:      The MIT License (MIT)
 #               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
@@ -38,13 +38,23 @@
 # Date:         09/07/2021
 # Change:       Now 'dotfiles' repo will be the only repo for all the files
 #
+# Version:      0.6
+# By:           Julio Jimenez Delgado
+# Date:         04/08/2021
+# Change:       Auto update commit and push
 #
 
-#----------------------------------[Declarations and definitions]----------------------------------
+# -.- [MODULES] -.-
+
+# Git functions
+. /home/jjimenez/github/js-sh/modules/git.sh
+. /home/jjimenez/github/js-sh/modules/general.sh
+
+# -.- [DECLARATIONS AND DEFINITIONS] -.-
 
 #Script info and arguments evaluation variables
 declare script_name="js-dotfiles-bkp.sh"
-declare version="v.0.5"
+declare version="v.0.6"
 declare description="Create dotfiles backup"
 
 #Global operational variables
@@ -91,97 +101,77 @@ declare -a dotConfig=(
 "starship.toml"
 )
 
-#-------------------------------------------[Functions]--------------------------------------------
-
-#Script header
-header() 
-{
-  #Init color variables
-  declare NC='\033[0m'
-  declare LIGHT_GREY='\033[0;37m'
-  declare YELLOW='\033[1;33m'
-
-  echo 
-  echo -e "${LIGHT_GREY} $script_name ${YELLOW}$version ${LIGHT_GREY}- $description${NC}\n"
-  echo 
-}
+# -.- [FUNCTIONS] -.-
 
 #Operational functions (if required)
-gitCheck()
+copyDotfiles_fromHome()
 {
-  declare gitRepo
-
-  declare currentDir
-  declare NC
-  declare LIGHT_GREEN
-
-  NC='\033[0m'
-  LIGHT_GREEN='\033[1;32m'
-
-  gitRepo="$HOME/github/dotfiles"
-
-  currentDir="$(pwd)"
-
-  if cd "$gitRepo"; then
-    echo -e "${LIGHT_GREEN}GIT status of [$(pwd)]${NC}"
-    echo "---"
-    git status --short
-    echo "---"
-  else
-    echo "$gitRepo doesn't exist"
-  fi
-
-  cd "$currentDir" || echo "$currentDir doesn't exsit"
-}
-
-#Main function
-main()
-{
-  #Color variables
-  declare NC='\033[0m'
-  declare LIGHT_GREEN='\033[1;32m'
-  declare YELLOW='\033[1;33m'
-
-  #Repo path
-  declare repo="$HOME/github/dotfiles"
-
-  echo "Backup to: [$HOME/github/dotfiles]"
-  echo "-------------------------------------------"
   #Only dotfiles from '~/' directory
+
   for d in "${dotFiles[@]}"; do
     #if there is no differences between the dotFile source and the repo,
     #the file or directory won't be copied
+
     if diff -q "$HOME/$d" "$repo/$d" > /dev/null; then
       echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
     else
       cp -f "$HOME/$d" "$repo/$d" && echo -e "${YELLOW}[ copied ]${NC} $d"
     fi
   done
+}
 
+copyDotfiles_fromHomeDotConfig()
+{
   #Dotfiles from '~/.config' directory
+  
   for c in "${dotConfig[@]}"; do
     #if there is no differences between the dotConfig source and the repo,
     #the file or directory won't be copied
+
     if diff -q "$HOME/.config/$c" "$repo/.config/$c" > /dev/null; then
       echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
     else
       cp -rf "$HOME/.config/$c" "$repo/.config/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
     fi
   done
+}
 
+#Main function
+main()
+{
+  #Color variables
+  declare NC
+  NC='\033[0m'
+
+  declare LIGHT_GREEN
+  LIGHT_GREEN='\033[1;32m'
+  
+  declare YELLOW
+  YELLOW='\033[1;33m'
+
+  declare RED
+  RED='\033[0;31m'
+
+  #Repo path
+  declare repo
+  repo="$HOME/github/dotfiles"
+
+  echo "Backup to: [$HOME/github/dotfiles]"
+  echo "-------------------------------------------"
+  copyDotfiles_fromHome
+  copyDotfiles_fromHomeDotConfig
   echo "-------------------------------------------"
   echo
 
-  gitCheck
+  gitCheck_and_commit "$repo"
 
   echo
 }
 
-#-------------------------------------------[Execution]--------------------------------------------
-
+# -.- [EXECUTION] -.-
 
 #Printing the header
-header
+header "$script_name" "$version" "$description"
 
 #Main function execution
 main
