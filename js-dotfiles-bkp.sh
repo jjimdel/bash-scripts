@@ -4,7 +4,7 @@
 # Description:  Create dotfiles backup
 # Contributors: Julio Jimenez Delgado
 #
-# GitHub repo:	https://github.com/jouleSoft/js-DevOps
+# GitHub repo:  https://github.com/jouleSoft/js-DevOps
 #
 # License:      The MIT License (MIT)
 #               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
@@ -44,7 +44,13 @@
 # Change:       Auto update commit and push
 #
 
-#----------------------------------[Declarations and definitions]----------------------------------
+# -.- [MODULES] -.-
+
+# Git functions
+. /home/jjimenez/github/js-sh/modules/git.sh
+. /home/jjimenez/github/js-sh/modules/general.sh
+
+# -.- [DECLARATIONS AND DEFINITIONS] -.-
 
 #Script info and arguments evaluation variables
 declare script_name="js-dotfiles-bkp.sh"
@@ -95,49 +101,9 @@ declare -a dotConfig=(
 "starship.toml"
 )
 
-#-------------------------------------------[Functions]--------------------------------------------
-
-#Script header
-header() 
-{
-  #Init color variables
-  declare NC='\033[0m'
-  declare LIGHT_GREY='\033[0;37m'
-  declare YELLOW='\033[1;33m'
-
-  echo 
-  echo -e "${LIGHT_GREY} $script_name ${YELLOW}$version ${LIGHT_GREY}- $description${NC}\n"
-  echo 
-}
+# -.- [FUNCTIONS] -.-
 
 #Operational functions (if required)
-# gitCheck()
-# {
-#   declare gitRepo
-# 
-#   declare currentDir
-#   declare NC
-#   declare LIGHT_GREEN
-# 
-#   NC='\033[0m'
-#   LIGHT_GREEN='\033[1;32m'
-# 
-#   gitRepo="$HOME/github/dotfiles"
-# 
-#   currentDir="$(pwd)"
-# 
-#   if cd "$gitRepo"; then
-#     echo -e "${LIGHT_GREEN}GIT status of [$(pwd)]${NC}"
-#     echo "---"
-#     git status --short
-#     echo "---"
-#   else
-#     echo "$gitRepo doesn't exist"
-#   fi
-# 
-#   cd "$currentDir" || echo "$currentDir doesn't exsit"
-# }
-
 copyDotfiles_fromHome()
 {
   #Only dotfiles from '~/' directory
@@ -170,49 +136,6 @@ copyDotfiles_fromHomeDotConfig()
   done
 }
 
-gitCheck_and_commit()
-{
-  if [ -e "$HOME/github/dotfiles" ]; then
-    declare gitRepo
-    gitRepo="$HOME/github/dotfiles"
-  else
-    exit 1
-  fi
-
-  declare currentDir
-  currentDir="$(pwd)"
-
-  #declare NC
-  #NC='\033[0m'
-
-  #declare LIGHT_GREEN
-  #LIGHT_GREEN='\033[1;32m'
-
-  if cd "$gitRepo"; then
-    echo -e "${LIGHT_GREEN}GIT status of [$(pwd)]${NC}"
-    echo "---"
-    git status --short
-    echo "---"
-
-    if git add . && git commit -m "backup" > /dev/null; then 
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} commit"
-    else
-      echo -e "${RED}[   KO   ]${NC} commit"
-    fi
-
-    if git push -q > /dev/null; then
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} push"
-    else
-      echo -e "${RED}[   KO   ]${NC} push"
-    fi
-
-  else
-    echo "$gitRepo doesn't exist or it can't be openned"
-  fi
-
-  cd "$currentDir" || echo "$currentDir doesn't exsit"
-}
-
 #Main function
 main()
 {
@@ -240,16 +163,15 @@ main()
   echo "-------------------------------------------"
   echo
 
-  gitCheck_and_commit
+  gitCheck_and_commit "$repo"
 
   echo
 }
 
-#-------------------------------------------[Execution]--------------------------------------------
-
+# -.- [EXECUTION] -.-
 
 #Printing the header
-header
+header "$script_name" "$version" "$description"
 
 #Main function execution
 main
