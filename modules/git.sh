@@ -11,7 +11,7 @@ gitCommit()
   if [ "$confirm" == "y" ] || [ "$confirm" == "Y" ]; then
 
     # if git add returns with 0, then if git commit returns 0
-    if git add . && git commit -m "backup" > /dev/null; then
+    if git add . && git commit -m "authomatic backup" > /dev/null; then
     echo -e "${LIGHT_GREEN}[   OK   ]${NC} commit"
 
     # if git push returns 0
