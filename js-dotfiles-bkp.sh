@@ -101,6 +101,14 @@ declare -a dotConfig=(
 "starship.toml"
 )
 
+#dotfiles from '~/.doom.d' directory
+declare -a dotDoom=(
+  "init.el"
+  "config.el"
+  "custom.el"
+  "packages.el"
+)
+
 # -.- [FUNCTIONS] -.-
 
 #Operational functions (if required)
@@ -136,6 +144,25 @@ copyDotfiles_fromHomeDotConfig()
   done
 }
 
+copyDotfiles_fromHomeDotDoom()
+{
+  #Dotfiles from '~/.doom.d' directory
+
+  for c in "${dotDoom[@]}"; do
+
+    if [ ! -e "$repo/.doom.d/$c" ]; then
+      #it there is no files yet in the repo, create the first copy of them.
+      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
+    elif diff -q "$HOME/.doom.d/$c" "$repo/.doom.d/$c" > /dev/null; then
+      #if there is no differences between the dotDoom source and the repo,
+      #the file or directory won't be copied
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
+    else
+      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
+    fi
+  done
+}
+
 #Main function
 main()
 {
@@ -160,6 +187,7 @@ main()
   echo "-------------------------------------------"
   copyDotfiles_fromHome
   copyDotfiles_fromHomeDotConfig
+  copyDotfiles_fromHomeDotDoom
   echo "-------------------------------------------"
   echo
 
