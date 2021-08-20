@@ -73,6 +73,7 @@ declare -a dotConfig=(
 "dunst/dunstrc"
 "fish/config.fish"
 "fish/fish_variables"
+"gtk-3.0/gtk.css"
 "i3status-rust/config.toml"
 "i3status/config"
 "i3/config"
