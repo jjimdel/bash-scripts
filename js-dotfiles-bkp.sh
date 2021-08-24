@@ -43,18 +43,23 @@
 # Date:         04/08/2021
 # Change:       Auto update commit and push
 #
+# Version:      0.7
+# By:           Julio Jimenez Delgado
+# Date:         24/08/2021
+# Change:       Checks if there is configuration file before the diff operation
+#
 
 # -.- [MODULES] -.-
 
 # Git functions
-. /home/jjimenez/github/js-sh/modules/git.sh
-. /home/jjimenez/github/js-sh/modules/general.sh
+. /home/jjimenez/workspace/bash-scripts/modules/git.sh
+. /home/jjimenez/workspace/bash-scripts/modules/general.sh
 
 # -.- [DECLARATIONS AND DEFINITIONS] -.-
 
 #Script info and arguments evaluation variables
 declare script_name="js-dotfiles-bkp.sh"
-declare version="v.0.6"
+declare version="v.0.7"
 declare description="Create dotfiles backup"
 
 #Global operational variables
@@ -121,10 +126,14 @@ copyDotfiles_fromHome()
     #if there is no differences between the dotFile source and the repo,
     #the file or directory won't be copied
 
-    if diff -q "$HOME/$d" "$repo/$d" > /dev/null; then
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+    if [ -e $HOME/$d ]; then
+      if diff -q "$HOME/$d" "$repo/$d" > /dev/null; then
+        echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+      else
+        cp -f "$HOME/$d" "$repo/$d" && echo -e "${YELLOW}[ copied ]${NC} $d"
+      fi
     else
-      cp -f "$HOME/$d" "$repo/$d" && echo -e "${YELLOW}[ copied ]${NC} $d"
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
     fi
   done
 }
@@ -137,10 +146,14 @@ copyDotfiles_fromHomeDotConfig()
     #if there is no differences between the dotConfig source and the repo,
     #the file or directory won't be copied
 
-    if diff -q "$HOME/.config/$c" "$repo/.config/$c" > /dev/null; then
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
+    if [ -e $HOME/.config/$c ]; then
+      if diff -q "$HOME/.config/$c" "$repo/.config/$c" > /dev/null; then
+        echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
+      else
+        cp -rf "$HOME/.config/$c" "$repo/.config/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
+      fi
     else
-      cp -rf "$HOME/.config/$c" "$repo/.config/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
     fi
   done
 }
@@ -182,9 +195,9 @@ main()
 
   #Repo path
   declare repo
-  repo="$HOME/github/dotfiles"
+  repo="$HOME/workspace/dotfiles"
 
-  echo "Backup to: [$HOME/github/dotfiles]"
+  echo "Backup to: [$HOME/workspace/dotfiles]"
   echo "-------------------------------------------"
   copyDotfiles_fromHome
   copyDotfiles_fromHomeDotConfig
