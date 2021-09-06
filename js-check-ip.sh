@@ -71,7 +71,7 @@ check_ip()
   ping -c 1 -4 -I "$1" "$2" > /dev/null
 
   if [ "$?" -eq 0 ]; then
-    log_write="$time_stamp: ping to $2 success"
+    log_write="$time_stamp: ping to $2 succeeded"
   else
     log_write="$time_stamp: ping to $2 failed"
   fi
