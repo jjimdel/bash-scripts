@@ -32,13 +32,15 @@ declare description="Checks an IP address and log the result"
 
 #Arguments arrays: used on the help screen when args_check() function evals '1'.
 declare -a args_array=(
-        "target"
-        "log_file"
-        )
+  "source_addr"
+  "target"
+  "log_file"
+)
 declare -a args_definition_array=(
-        "Hostname or IP address to check"
-        "Logfile path"
-        )
+  "Source interface or IP address"
+  "Hostname or IP address to check"
+  "Logfile path"
+)
 
 #Total arguments expected / introduced
 declare args=${#args_array[@]}
@@ -56,7 +58,32 @@ declare -a deps_check_array=()
 
 #### -.- [FUNCTIONS] -.-  ####
 
-# NONE
+check_ip()
+{
+  declare time_stamp
+  declare log_file
+  declare log_write
+
+  time_stamp="$(date +%d-%m-%y' '%H:%M:%S' '%Z)"
+  log_file=""
+
+
+  ping -c 1 -4 -I "$1" "$2" > /dev/null
+
+  if [ "$?" -eq 0 ]; then
+    log_write="$time_stamp: ping to $2 success"
+  else
+    log_write="$time_stamp: ping to $2 failed"
+  fi
+
+
+  if [ ! -e "$3" ]; then
+    echo "# js-check-ip.sh log file" > "$3"
+    echo "---" >> "$3"
+  fi
+  echo "$log_write" >> "$3"
+}
+
 
 #Operational functions (if required)
 #
@@ -64,36 +91,41 @@ declare -a deps_check_array=()
 #Main function
 main()
 {
-        echo
-        #Write main code block here!!
-        echo
+  check_ip "$@"
+  echo
 }
 
 #### -.- [EXECUTION] -.-  ####
 
 #Printing the header
-header
+header "$script_name" "$version" "$description"
 
 #Dependency evalutation
 deps_check "${deps_array[@]}"
 
 #Arguments number evaluation
 if [[ ${#deps_check_array[@]} -eq 0 ]]; then
-        args_check "$@"
+  args_check "$@"
 else
-        echo "The dependencies listed below are needed:"
-        for e in "${deps_check_array[@]}"; do
-                echo "     $e"
-        done
+  echo "The dependencies listed below are needed:"
+  for e in "${deps_check_array[@]}"; do
+    echo "     $e"
+  done
 
-        echo
+  echo
 
-        #If there are not all the dependencies, the main function will be skipped
-        args_check_result=1
+  #If there are not all the dependencies, the main function will be skipped
+  args_check_result=1
 fi
 
 if [ $args_check_result -eq 0 ]; then
-        main "$@"
+  main "$@"
+
+  if [ "$?" -eq 0 ]; then
+    exit 0
+  else
+    exit 1
+  fi
 fi
 
 #### -.- [FINALIZATION] -.-  ####
