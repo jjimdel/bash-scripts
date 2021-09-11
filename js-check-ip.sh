@@ -7,7 +7,7 @@
 # GitHub repo:  https://github.com/jouleSoft/bash-scripts.git
 #
 # License:      The MIT License (MIT)
-#               Copyright (c) <YEAR> Julio Jiménez Delgado (jouleSoft)
+#               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
 #
 # Template:     args-dep.sh <https://github.com/jouleSoft/bash-scripts/templates>
 #
