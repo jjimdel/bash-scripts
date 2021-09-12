@@ -50,14 +50,20 @@
 #
 # Version:      0.8
 # By:           Julio Jimenez Delgado
-# Date:         -
+# Date:         12/09/2021-
 # Change:       Added a legend
-#               Copy file functions refactored
+#               Copy files functions refactored
+#
+# Version:      0.9
+# By:           Julio Jimenez Delgado
+# Date:         -
+# Change:       Copy files functions refactored to an a general function
 #
 
 # -.- [MODULES] -.-
 
 # Git functions
+. /home/jjimenez/workspace/bash-scripts/modules/dotfiles.sh
 . /home/jjimenez/workspace/bash-scripts/modules/general.sh
 . /home/jjimenez/workspace/bash-scripts/modules/git.sh
 
@@ -139,7 +145,7 @@ copyDotfiles_fromHome()
 
         output="${LIGHT_GREEN}[   OK   ]${NC} $d"
       else
-        cp -f "$HOME/$d" "$repo/$d" && output="${YELLOW}[ copied ]${NC} $d"
+        cp -f "$HOME/$d" "$repo/$d" && output="${YELLOW}[   CP   ]${NC} $d"
       fi
 
     else
@@ -167,7 +173,7 @@ copyDotfiles_fromHomeDotConfig()
 
         output="${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
       else
-        cp -rf "$HOME/.config/$c" "$repo/.config/$c" && output="${YELLOW}[ copied ]${NC} .config/$c"
+        cp -rf "$HOME/.config/$c" "$repo/.config/$c" && output="${YELLOW}[   CP   ]${NC} .config/$c"
       fi
 
     else
@@ -189,7 +195,7 @@ copyDotfiles_fromHomeDotDoom()
 
     if [ ! -e "$repo/.doom.d/$c" ]; then
       #if there is no files yet in the repo, create the first copy of them.
-      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && output="${YELLOW}[ copied ]${NC} .doom.d/$c"
+      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && output="${YELLOW}[   CP   ]${NC} .doom.d/$c"
 
     elif diff -q "$HOME/.doom.d/$c" "$repo/.doom.d/$c" > /dev/null; then
       #if there is no differences between the dotDoom source and the repo,
@@ -197,7 +203,7 @@ copyDotfiles_fromHomeDotDoom()
       output="${LIGHT_GREEN}[   OK   ]${NC} .doom.d/$c"
 
     else
-      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && output="${YELLOW}[ copied ]${NC} .doom.d/$c"
+      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && output="${YELLOW}[   CP   ]${NC} .doom.d/$c"
     fi
 
     echo -e "  $output"
@@ -209,7 +215,7 @@ showLegend()
 {
   echo -e "Legend:\n"
   echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The files are in its last version"
-  echo -e "  ${YELLOW}[ copied ]${NC}: The files has been copied"
+  echo -e "  ${YELLOW}[   CP   ]${NC}: The files has been copied"
   echo -e "  ${NC}[   NN   ]: Not Needed. The dotfile is not currently in the system"
 }
 
