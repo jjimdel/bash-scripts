@@ -65,8 +65,8 @@
 
 #Script info and arguments evaluation variables
 declare script_name="js-dotfiles-bkp.sh"
-declare version="v.0.7"
-declare description="Create dotfiles backup"
+declare version="v.0.8"
+declare description="Create dotfiles backup at GitHub"
 
 #Global operational variables
 #dotfiles from '~/' directory
