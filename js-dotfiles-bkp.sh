@@ -48,12 +48,17 @@
 # Date:         24/08/2021
 # Change:       Checks if there is configuration file before the diff operation
 #
+# Version:      0.8
+# By:           Julio Jimenez Delgado
+# Date:         -
+# Change:       Added a legend
+#
 
 # -.- [MODULES] -.-
 
 # Git functions
-. /home/jjimenez/workspace/bash-scripts/modules/git.sh
 . /home/jjimenez/workspace/bash-scripts/modules/general.sh
+. /home/jjimenez/workspace/bash-scripts/modules/git.sh
 
 # -.- [DECLARATIONS AND DEFINITIONS] -.-
 
@@ -133,7 +138,7 @@ copyDotfiles_fromHome()
         cp -f "$HOME/$d" "$repo/$d" && echo -e "${YELLOW}[ copied ]${NC} $d"
       fi
     else
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+      echo -e "${NC}[   NN   ] $d"
     fi
   done
 }
@@ -143,17 +148,18 @@ copyDotfiles_fromHomeDotConfig()
   #Dotfiles from '~/.config' directory
   
   for c in "${dotConfig[@]}"; do
-    #if there is no differences between the dotConfig source and the repo,
-    #the file or directory won't be copied
 
     if [ -e $HOME/.config/$c ]; then
       if diff -q "$HOME/.config/$c" "$repo/.config/$c" > /dev/null; then
+        #if there is no differences between the dotConfig source and the repo,
+        #the file or directory won't be copied
+
         echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
       else
         cp -rf "$HOME/.config/$c" "$repo/.config/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
       fi
     else
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+      echo -e "${NC}[   NN   ] .config/$c"
     fi
   done
 }
@@ -175,6 +181,14 @@ copyDotfiles_fromHomeDotDoom()
       cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && echo -e "${YELLOW}[ copied ]${NC} .doom.d/$c"
     fi
   done
+}
+
+showLegend()
+{
+  echo -e "Legend:\n"
+  echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The files are in its last version"
+  echo -e "  ${YELLOW}[ copied ]${NC}: The files has been copied"
+  echo -e "  ${NC}[   NN   ]: Not Needed. The dotfile is not currently in the system"
 }
 
 #Main function
@@ -203,6 +217,8 @@ main()
   copyDotfiles_fromHomeDotConfig
   copyDotfiles_fromHomeDotDoom
   echo "-------------------------------------------"
+  echo
+  showLegend
   echo
 
   gitCheck_and_commit "$repo"
