@@ -48,12 +48,18 @@
 # Date:         24/08/2021
 # Change:       Checks if there is configuration file before the diff operation
 #
+# Version:      0.8
+# By:           Julio Jimenez Delgado
+# Date:         -
+# Change:       Added a legend
+#               Copy file functions refactored
+#
 
 # -.- [MODULES] -.-
 
 # Git functions
-. /home/jjimenez/workspace/bash-scripts/modules/git.sh
 . /home/jjimenez/workspace/bash-scripts/modules/general.sh
+. /home/jjimenez/workspace/bash-scripts/modules/git.sh
 
 # -.- [DECLARATIONS AND DEFINITIONS] -.-
 
@@ -109,10 +115,10 @@ declare -a dotConfig=(
 
 #dotfiles from '~/.doom.d' directory
 declare -a dotDoom=(
-  "init.el"
-  "config.el"
-  "custom.el"
-  "packages.el"
+"init.el"
+"config.el"
+"custom.el"
+"packages.el"
 )
 
 # -.- [FUNCTIONS] -.-
@@ -122,39 +128,54 @@ copyDotfiles_fromHome()
 {
   #Only dotfiles from '~/' directory
 
-  for d in "${dotFiles[@]}"; do
-    #if there is no differences between the dotFile source and the repo,
-    #the file or directory won't be copied
+  declare output
 
+  for d in "${dotFiles[@]}"; do
     if [ -e $HOME/$d ]; then
+
       if diff -q "$HOME/$d" "$repo/$d" > /dev/null; then
-        echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+        #if there is no differences between the dotFile source and the repo,
+        #the file or directory won't be copied
+
+        output="${LIGHT_GREEN}[   OK   ]${NC} $d"
       else
-        cp -f "$HOME/$d" "$repo/$d" && echo -e "${YELLOW}[ copied ]${NC} $d"
+        cp -f "$HOME/$d" "$repo/$d" && output="${YELLOW}[ copied ]${NC} $d"
       fi
+
     else
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+      output="${NC}[   NN   ] $d"
     fi
+
+    echo -e "  $output"
+
   done
 }
 
 copyDotfiles_fromHomeDotConfig()
 {
   #Dotfiles from '~/.config' directory
+
+  declare output
   
   for c in "${dotConfig[@]}"; do
-    #if there is no differences between the dotConfig source and the repo,
-    #the file or directory won't be copied
 
     if [ -e $HOME/.config/$c ]; then
+
       if diff -q "$HOME/.config/$c" "$repo/.config/$c" > /dev/null; then
-        echo -e "${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
+        #if there is no differences between the dotConfig source and the repo,
+        #the file or directory won't be copied
+
+        output="${LIGHT_GREEN}[   OK   ]${NC} .config/$c"
       else
-        cp -rf "$HOME/.config/$c" "$repo/.config/$c" && echo -e "${YELLOW}[ copied ]${NC} .config/$c"
+        cp -rf "$HOME/.config/$c" "$repo/.config/$c" && output="${YELLOW}[ copied ]${NC} .config/$c"
       fi
+
     else
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $d"
+      output="${NC}[   NN   ] .config/$c"
     fi
+
+    echo -e "  $output"
+
   done
 }
 
@@ -162,19 +183,34 @@ copyDotfiles_fromHomeDotDoom()
 {
   #Dotfiles from '~/.doom.d' directory
 
+  declare output
+
   for c in "${dotDoom[@]}"; do
 
     if [ ! -e "$repo/.doom.d/$c" ]; then
-      #it there is no files yet in the repo, create the first copy of them.
-      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && echo -e "${YELLOW}[ copied ]${NC} .doom.d/$c"
+      #if there is no files yet in the repo, create the first copy of them.
+      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && output="${YELLOW}[ copied ]${NC} .doom.d/$c"
+
     elif diff -q "$HOME/.doom.d/$c" "$repo/.doom.d/$c" > /dev/null; then
       #if there is no differences between the dotDoom source and the repo,
       #the file or directory won't be copied
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} .doom.d/$c"
+      output="${LIGHT_GREEN}[   OK   ]${NC} .doom.d/$c"
+
     else
-      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && echo -e "${YELLOW}[ copied ]${NC} .doom.d/$c"
+      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && output="${YELLOW}[ copied ]${NC} .doom.d/$c"
     fi
+
+    echo -e "  $output"
+
   done
+}
+
+showLegend()
+{
+  echo -e "Legend:\n"
+  echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The files are in its last version"
+  echo -e "  ${YELLOW}[ copied ]${NC}: The files has been copied"
+  echo -e "  ${NC}[   NN   ]: Not Needed. The dotfile is not currently in the system"
 }
 
 #Main function
@@ -203,6 +239,8 @@ main()
   copyDotfiles_fromHomeDotConfig
   copyDotfiles_fromHomeDotDoom
   echo "-------------------------------------------"
+  echo
+  showLegend
   echo
 
   gitCheck_and_commit "$repo"
