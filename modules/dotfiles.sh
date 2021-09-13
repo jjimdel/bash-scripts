@@ -2,23 +2,26 @@
 
 dotFilesCopy()
 {
-  #Dotfiles from '~/.doom.d' directory
-
   declare output
+  declare -a dotFiles_array="$1"
 
-  for c in "${dotDoom[@]}"; do
+  for c in "${dotFiles_array[@]}"; do
 
-    if [ ! -e "$repo/.doom.d/$c" ]; then
+    if [ ! -e "$repo/$c" ]; then
       #if there is no files yet in the repo, create the first copy of them.
-      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && output="${YELLOW}[   CP   ]${NC} .doom.d/$c"
+      cp -rf "$HOME/$c" "$repo/$c" && output="${YELLOW}[   CP   ]${NC} $c"
 
-    elif diff -q "$HOME/.doom.d/$c" "$repo/.doom.d/$c" > /dev/null; then
-      #if there is no differences between the dotDoom source and the repo,
+    elif [ ! -e "$HOME/$c" ]; then
+      #if there is no files in the homedir, copy is not needed.
+      output="${NC}[   NN   ] $c"
+
+    elif diff -q "$HOME/$c" "$repo/$c" > /dev/null; then
+      #if there is no differences between the dotFile from source and the repo,
       #the file or directory won't be copied
-      output="${LIGHT_GREEN}[   OK   ]${NC} .doom.d/$c"
+      output="${LIGHT_GREEN}[   OK   ]${NC} $c"
 
     else
-      cp -rf "$HOME/.doom.d/$c" "$repo/.doom.d/$c" && output="${YELLOW}[   CP   ]${NC} .doom.d/$c"
+      cp -rf "$HOME/$c" "$repo/$c" && output="${YELLOW}[   CP   ]${NC} $c"
     fi
 
     echo -e "  $output"
