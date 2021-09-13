@@ -23,11 +23,11 @@ gitCommit()
 
     else
       if [ "$?" -eq 1 ]; then
-      echo "[   --   ] commit"
-      echo "[   --   ] push"
+      echo "  [   --   ] commit"
+      echo "  [   --   ] push"
       else
-        echo -e "${RED}[   KO   ]${NC} commit"
-        echo "[   --   ] push"
+        echo -e "${RED}  [   KO   ]${NC} commit"
+        echo "  [   --   ] push"
       fi
     fi
   fi
@@ -53,10 +53,10 @@ gitCheck_and_commit()
   # change to the repo directory
   if cd "$gitRepo"; then
     echo -e "${LIGHT_GREEN}GIT status of [$(pwd)]${NC}"
-    echo "---"
+    echo " ---"
     # check git status
     git status --short
-    echo "---"
+    echo " ---"
 
     echo
 
