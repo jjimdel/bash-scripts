@@ -54,7 +54,7 @@ git_SomethingToStage()
   #   - git
   #
 
-  if [ $(git status --short | wc -c) = 1 ]; then
+  if [ $(git status --short | wc -c) != 0 ]; then
     echo -e "${LIGHT_GREEN}GIT status of [$(pwd)]${NC}"
     echo " ---"
     # check git status
