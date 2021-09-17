@@ -31,7 +31,7 @@ declare version
 declare description
 
 script_name="js-dotfiles-bkp.sh"
-version="v.0.9"
+version="v.1.0"
 description="Create dotfiles backup at GitHub"
 
 #Global operational variables
@@ -113,7 +113,7 @@ main()
   declare repo
   repo="$HOME/workspace/dotfiles"
 
-  echo "Backup to: [$HOME/workspace/dotfiles]"
+  echo " Backup to: [$HOME/workspace/dotfiles]"
   echo " -------------------------------------------"
   for d in ${dotFiles[@]}; do
     dotFilesCopy $d
