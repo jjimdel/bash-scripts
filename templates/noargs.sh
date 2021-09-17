@@ -1,27 +1,26 @@
 #!/usr/bin/env bash
-# ---
+
+# 
 # Title:        <SCRIPT_NAME>
 # Description:  <SHORT_DESCRIPTION>
 # Contributors: Julio Jimenez Delgado
 #
-# GitHub repo:	https://github.com/jouleSoft/<repo-name>
+# GitHub repo:	https://github.com/jouleSoft/bash-scripts
 #
 # License:      The MIT License (MIT)
 #               Copyright (c) <YEAR> Julio Jiménez Delgado (jouleSoft)
 #
-# Template:     noargs.sh <https://github.com/jouleSoft/js-templates>
+# Template:     noargs.sh <https://github.com/jouleSoft/bash-scripts/templates/>
 #
 # Dependencies: <dependency1>
 #               <dependency2>
 # 
-# Version:      0.1
-# By:           Julio Jimenez Delgado
-# Date:         <DD/MM/AAAA>
-# Change:       Initial development
-# 
-#
 
-#----------------------------------[Declarations and definitions]----------------------------------
+#### [MODULES] ####
+
+. /home/jjimenez/workspace/bash-scripts/modules/general.sh
+
+#### [DECLARATIONS AND DEFINITIONS] ####
 
 #Script info and arguments evaluation variables
 declare script_name
@@ -35,49 +34,29 @@ description=""
 #Global operational variables
 # NONE
 
-#-------------------------------------------[Functions]--------------------------------------------
-
-#Script header
-header() 
-{
-	#Declare color variables
-	declare NC 
-	declare LIGHT_GREY
-	declare YELLOW
-
-	#Init color variables
-	NC='\033[0m'
-	LIGHT_GREY='\033[0;37m'
-	YELLOW='\033[1;33m'
-
-	echo 
-	#Print script header
-	echo -e "${LIGHT_GREY} $script_name ${YELLOW}$version ${LIGHT_GREY}- $description${NC}\n"
-	echo 
-}
+#### [FUNCTIONS] ####
 
 #Operational functions (if required)
-#
+# NONE
 
 #Main function
 main()
 {
-	echo
-	#Write main code block here!!
-	echo
+  echo
+  #Write main code block here!!
+  echo
 }
 
-#-------------------------------------------[Execution]--------------------------------------------
-
+#### [EXECUTION] ####
 
 #Printing the header
-header
+header "$script_name" "$version" "$description"
 
 #Main function execution
 main
 
 
-#------------------------------------------[Finalization]------------------------------------------
+#### [FINALIZATION] ####
 
 #Script header
 unset script_name
