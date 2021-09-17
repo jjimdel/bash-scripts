@@ -12,52 +12,6 @@
 # Template:     template_noargs.sh <https://github.com/jouleSoft/js-DevOps/templates/>
 #
 # Dependencies: git
-# 
-# Version:      0.1
-# By:           Julio Jimenez Delgado
-# Date:         30/05/2021
-# Change:       Initial development
-#
-# Version:      0.2
-# By:           Julio Jimenez Delgado
-# Date:         30/05/2021
-# Change:       Check GIT status of all dotfile repos
-#
-# Version:      0.3
-# By:           Julio Jimenez Delgado
-# Date:         01/06/2021
-# Change:       Redirect diff output to /dev/null
-#
-# Version:      0.4
-# By:           Julio Jimenez Delgado
-# Date:         12/06/2021
-# Change:       Conky dotfile added
-#
-# Version:      0.5
-# By:           Julio Jimenez Delgado
-# Date:         09/07/2021
-# Change:       Now 'dotfiles' repo will be the only repo for all the files
-#
-# Version:      0.6
-# By:           Julio Jimenez Delgado
-# Date:         04/08/2021
-# Change:       Auto update commit and push
-#
-# Version:      0.7
-# By:           Julio Jimenez Delgado
-# Date:         24/08/2021
-# Change:       Checks if there is configuration file before the diff operation
-#
-# Version:      0.8
-# By:           Julio Jimenez Delgado
-# Date:         12/09/2021
-# Change:       Added a legend
-#               Copy files functions refactored
-#
-# Version:      0.9
-# By:           Julio Jimenez Delgado
-# Date:         13/09/2021
-# Change:       Copy files functions refactored to an a general function
 #
 
 # -.- [MODULES] -.-
@@ -104,6 +58,7 @@ declare -a dotConfig=(
 ".config/kitty/diff.conf"
 ".config/kitty/dracula.conf"
 ".config/kitty/kitty.conf"
+".config/nvim/init.vim"
 ".config/picom.conf"
 ".config/polybar/config"
 ".config/polybar/launch.sh"
