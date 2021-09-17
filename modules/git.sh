@@ -79,9 +79,6 @@ gitCheck_and_commit()
   # updated:      13-09-2021
   # change:       text formated
   #
-  # dependencies
-  #   - git
-  #
   # parameters
   #   - $1 : repository path
   #
