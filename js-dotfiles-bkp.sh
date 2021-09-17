@@ -1,31 +1,38 @@
 #!/usr/bin/env bash
-# ---
+
+# 
 # Title:        js-dotfiles-bkp.sh
 # Description:  Create dotfiles backup
 # Contributors: Julio Jimenez Delgado
 #
-# GitHub repo:  https://github.com/jouleSoft/js-DevOps
+# GitHub repo:  https://github.com/jouleSoft/bash-scripts
 #
 # License:      The MIT License (MIT)
 #               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
 #
-# Template:     template_noargs.sh <https://github.com/jouleSoft/js-DevOps/templates/>
+# Template:     noargs.sh <https://github.com/jouleSoft/bash-scripts/templates/>
 #
-# Dependencies: git
+# Dependencies
+#   - git
+#   - coreutils
 #
 
-# -.- [MODULES] -.-
+#### [MODULES] ####
 
 . /home/jjimenez/workspace/bash-scripts/modules/dotfiles.sh
 . /home/jjimenez/workspace/bash-scripts/modules/general.sh
 . /home/jjimenez/workspace/bash-scripts/modules/git.sh
 
-# -.- [DECLARATIONS AND DEFINITIONS] -.-
+#### [DECLARATIONS AND DEFINITIONS] ####
 
 #Script info and arguments evaluation variables
-declare script_name="js-dotfiles-bkp.sh"
-declare version="v.0.9"
-declare description="Create dotfiles backup at GitHub"
+declare script_name
+declare version
+declare description
+
+script_name="js-dotfiles-bkp.sh"
+version="v.0.9"
+description="Create dotfiles backup at GitHub"
 
 #Global operational variables
 #dotfiles from '~/' directory
@@ -81,7 +88,7 @@ declare -a dotDoom=(
 ".doom.d/packages.el"
 )
 
-# -.- [FUNCTIONS] -.-
+#### [FUNCTIONS] ####
 
 #Operational functions (if required)
 # NONE
@@ -129,7 +136,7 @@ main()
   echo
 }
 
-# -.- [EXECUTION] -.-
+#### [EXECUTION] ####
 
 #Printing the header
 header "$script_name" "$version" "$description"
@@ -138,7 +145,7 @@ header "$script_name" "$version" "$description"
 main
 
 
-#------------------------------------------[Finalization]------------------------------------------
+#### [FINALIZATION] ####
 
 #Script header
 unset script_name
