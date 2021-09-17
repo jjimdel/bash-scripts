@@ -104,6 +104,7 @@ declare -a dotConfig=(
 ".config/kitty/diff.conf"
 ".config/kitty/dracula.conf"
 ".config/kitty/kitty.conf"
+".config/nvim/init.vim"
 ".config/picom.conf"
 ".config/polybar/config"
 ".config/polybar/launch.sh"
