@@ -45,8 +45,8 @@ dotFilesCopy()
 
 dotFilesCopy_legend()
 {
-  echo -e "Legend:\n"
-  echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The files are in its last version"
+  echo -e " Legend:\n"
+  echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The files are in their last version"
   echo -e "  ${YELLOW}[   CP   ]${NC}: The files has been copied"
   echo -e "  ${NC}[   NN   ]: Not Needed. The dotfile is not currently in the system"
 }
