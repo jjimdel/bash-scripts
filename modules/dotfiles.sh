@@ -2,14 +2,14 @@
 
 dotFilesCopy()
 {
-  # --
+  # 
   # contributor:  Julio Jiménez Delgado (jouleSoft)
   # version:      0.3
   # updated:      17-09-2021
   # change:       create repo subdir if not exists at first copy
   #
   # dependencies: coreutils
-  # --
+  # 
 
   declare output
   declare repo_subdir
@@ -45,8 +45,17 @@ dotFilesCopy()
 
 dotFilesCopy_legend()
 {
-  echo -e " Legend:\n"
-  echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The files are in their last version"
-  echo -e "  ${YELLOW}[   CP   ]${NC}: The files has been copied"
-  echo -e "  ${NC}[   NN   ]: Not Needed. The dotfile is not currently in the system"
+  # 
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.2
+  # updated:      18-09-2021
+  # change:       Output formated
+  #
+  # dependencies: coreutils
+  # 
+
+  echo -e "${CYAN} Legend:${NC}\n"
+  echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The dotFile is in its last version"
+  echo -e "  ${YELLOW}[   CP   ]${NC}: The dotFile has been copied"
+  echo -e "  ${NC}[   NN   ]: Not Needed. The dotFile is not currently in the system"
 }
