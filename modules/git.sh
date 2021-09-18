@@ -46,9 +46,9 @@ git_SomethingToStage()
 {
   #
   # contributor:  Julio Jiménez Delgado (jouleSoft)
-  # version:      0.1
+  # version:      0.2
   # updated:      17-09-2021
-  # change:       -
+  # change:       output formated
   #
   # dependencies
   #   - git
@@ -67,7 +67,7 @@ git_SomethingToStage()
 
     gitCommit
   else
-    echo -e "${LIGHT_GREEN} DotFiles up to date${NC}"
+    echo -e "${LIGHT_GREEN} _All dotFiles up to date${NC}"
   fi
 }
 

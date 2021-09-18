@@ -4,8 +4,7 @@
 # Description:  Downloading links from a text file using youtube-dl
 # Author:       Julio Jimenez Delgado
 #
-# GitHub repo:	https://github.com/jouleSoft/js-sh (stable)
-#				https://github.com/jouleSoft/js-DevOps (testing)
+# GitHub repo:	https://github.com/jouleSoft/bash-scripts
 #
 # License:      The MIT License (MIT)
 #				<https://github.com/jouleSoft/js-sh/blob/master/LICENSE>
