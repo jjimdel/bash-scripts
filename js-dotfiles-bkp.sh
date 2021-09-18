@@ -101,25 +101,11 @@ declare -a dotLocal=(
 #Main function
 main()
 {
-  #Color variables
-  declare NC
-  NC='\033[0m'
-
-  declare LIGHT_GREEN
-  LIGHT_GREEN='\033[1;32m'
-  
-  declare YELLOW
-  YELLOW='\033[1;33m'
-
-  declare RED
-  RED='\033[0;31m'
-
   #Repo path
   declare repo
   repo="$HOME/workspace/dotfiles"
 
-  echo " Backup to: [$HOME/workspace/dotfiles]"
-  echo " -------------------------------------------"
+  echo -e "${CYAN} Backup to: [$HOME/workspace/dotfiles]${NC}\n"
   for d in ${dotFiles[@]}; do
     dotFilesCopy $d
   done
@@ -135,8 +121,9 @@ main()
   for d in ${dotLocal[@]}; do
     dotFilesCopy $d
   done
-  echo " -------------------------------------------"
-  echo
+
+  echo -e "\n"
+  
   dotFilesCopy_legend
   echo
 
