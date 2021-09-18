@@ -1,18 +1,50 @@
-# jouleSoft's Bash Scripts Changelog
+<h1>jouleSoft's Bash Scripts Changelog</h1>
 
 **Table of Contents**
 
-* [js-dotfiles-bkp.sh](#js-dotfiles-bkp.sh)
+* [Modules](#modules)
+  * [common.sh](#commonsh)
+    * [Variables](#variables)
+    * [Functions](#functions)
+* [Scripts](#scripts)
+  * [js-check-ip.sh](#js-check-ipsh)
+  * [js-dotfiles-bkp.sh](#js-dotfiles-bkpsh)
 
-## js-check-ip.sh
+## Modules
+### common.sh
+#### Variables
+**v0.1**  
+First commit
 
-**v0.2**
+#### Functions
+args_check
+**v0.2**  
+Format updated
+
+**v0.1**  
+First commit
+
+<h4>deps_check</h4>
+**v0.1**  
+First commit
+
+<h4>header</h4>
+**v0.2**  
+Format updated
+
+**v0.1**  
+First commit
+
+## Scripts
+### js-check-ip.sh
+
+**v0.2**  
 Module 'general.sh' updated to 'common.sh'
 
-**v0.1**
+**v0.1**  
 Initial development
 
-## js-dotfiles-bkp.sh
+### js-dotfiles-bkp.sh
 
 **v1.0**  
 Output formated
