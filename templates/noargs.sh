@@ -26,7 +26,7 @@
 
 #### [MODULES] ####
 
-. /home/jjimenez/workspace/bash-scripts/modules/general.sh
+. /home/jjimenez/workspace/bash-scripts/modules/common.sh
 
 #### [DECLARATIONS AND DEFINITIONS] ####
 
