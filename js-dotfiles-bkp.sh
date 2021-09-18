@@ -88,6 +88,11 @@ declare -a dotDoom=(
 ".doom.d/packages.el"
 )
 
+#dotfiles from '~/.local' directory
+declare -a dotLocal=(
+".local/share/xfce4/terminal/colorschemes/Dracula.theme"
+)
+
 #### [FUNCTIONS] ####
 
 #Operational functions (if required)
@@ -124,6 +129,10 @@ main()
   done
 
   for d in ${dotDoom[@]}; do
+    dotFilesCopy $d
+  done
+
+  for d in ${dotLocal[@]}; do
     dotFilesCopy $d
   done
   echo " -------------------------------------------"
