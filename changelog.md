@@ -4,6 +4,14 @@
 
 * [js-dotfiles-bkp.sh](#js-dotfiles-bkp.sh)
 
+## js-check-ip.sh
+
+**v0.2**
+Module 'general.sh' updated to 'common.sh'
+
+**v0.1**
+Initial development
+
 ## js-dotfiles-bkp.sh
 
 **v1.0**  
