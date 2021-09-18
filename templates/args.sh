@@ -1,20 +1,29 @@
 #!/usr/bin/env bash
 
 # 
-# Title:        <SCRIPT_NAME>
-# Description:  <SHORT_DESCRIPTION>
-# Contributors: Julio Jimenez Delgado
+# Title
+#   <script_name>
 #
-# GitHub repo:	https://github.com/jouleSoft/bash-scripts
+# Description
+#   <short_description>
 #
-# License:      The MIT License (MIT)
-#               Copyright (c) <YEAR> Julio Jiménez Delgado (jouleSoft)
+# Contributor
+#   Julio Jimenez Delgado (jouleSoft)
 #
-# Template:     args.sh <https://github.com/jouleSoft/bash-scripts/templates/>
+# GitHub
+#   https://github.com/jouleSoft/bash-scripts.git
 #
-# Dependencies: <dependency1>
-#               <dependency2>
-# 
+# License
+#   The MIT License (MIT)
+#   Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
+#
+# Template
+#   https://github.com/jouleSoft/bash-scripts/templates/args.sh 
+#
+# Dependencies 
+#   <dependency | None>
+#
+
 
 #### [MODULES] ####
 

@@ -1,26 +1,34 @@
 #!/usr/bin/env bash
 
 # 
-# Title:        js-dotfiles-bkp.sh
-# Description:  Create dotfiles backup
-# Contributors: Julio Jimenez Delgado
+# Title
+#   js-dotfiles-bkp.sh
 #
-# GitHub repo:  https://github.com/jouleSoft/bash-scripts
+# Description
+#   Create dotfiles backup
 #
-# License:      The MIT License (MIT)
-#               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
+# Contributor
+#   Julio Jimenez Delgado (jouleSoft)
 #
-# Template:     noargs.sh <https://github.com/jouleSoft/bash-scripts/templates/>
+# GitHub
+#   https://github.com/jouleSoft/bash-scripts.git
 #
-# Dependencies
-#   - git
-#   - coreutils
+# License
+#   The MIT License (MIT)
+#   Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
+#
+# Template
+#   https://github.com/jouleSoft/bash-scripts/templates/noargs.sh 
+#
+# Dependencies 
+#   git
+#   coreutils
 #
 
 #### [MODULES] ####
 
+. /home/jjimenez/workspace/bash-scripts/modules/common.sh
 . /home/jjimenez/workspace/bash-scripts/modules/dotfiles.sh
-. /home/jjimenez/workspace/bash-scripts/modules/general.sh
 . /home/jjimenez/workspace/bash-scripts/modules/git.sh
 
 #### [DECLARATIONS AND DEFINITIONS] ####

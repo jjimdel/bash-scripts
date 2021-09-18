@@ -1,27 +1,31 @@
 #!/usr/bin/env bash
-# ---
-# Title:        js-check-ip.sh
-# Description:  Checks an IP address and log the result
-# Contributors: Julio Jimenez Delgado
+
+# 
+# Title
+#   js-check-ip.sh
 #
-# GitHub repo:  https://github.com/jouleSoft/bash-scripts.git
+# Description
+#   Checks an IP address and log the result
 #
-# License:      The MIT License (MIT)
-#               Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
+# Contributor
+#   Julio Jimenez Delgado (jouleSoft)
 #
-# Template:     args-dep.sh <https://github.com/jouleSoft/bash-scripts/templates>
+# GitHub
+#   https://github.com/jouleSoft/bash-scripts.git
 #
-# Dependencies: NONE
+# License
+#   The MIT License (MIT)
+#   Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
 #
-# Version:      0.1
-# By:           Julio Jimenez Delgado
-# Date:         06/09/2021
-# Change:       Initial development
+# Template
+#   https://github.com/jouleSoft/bash-scripts/templates/args.sh 
 #
+# Dependencies 
+#   None
 #
 
 ####  -.- [MODULES] -.-  ####
-. /home/jjimenez/workspace/bash-scripts/modules/general.sh
+. /home/jjimenez/workspace/bash-scripts/modules/common.sh
 
 ####  -.- [DECLARATIONS AND DEFINITIONS] -.-  ####
 
