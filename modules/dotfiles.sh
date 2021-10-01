@@ -21,7 +21,7 @@ dotFilesCopy()
     repo_subdir="$repo/$1"
 
     if [ ! -e $(dirname "$repo_subdir") ]; then
-      mkdir -p "$repo_subdir"
+      mkdir -p $(dirname "$repo_subdir")
     fi
 
     #make the first copy
