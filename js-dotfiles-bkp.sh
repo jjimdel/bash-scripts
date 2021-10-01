@@ -28,7 +28,6 @@
 #### [MODULES] ####
 
 . /home/jjimenez/workspace/bash-scripts/modules/common.sh
-. /home/jjimenez/workspace/bash-scripts/modules/dotfiles.sh
 . /home/jjimenez/workspace/bash-scripts/modules/git.sh
 
 #### [DECLARATIONS AND DEFINITIONS] ####
@@ -85,6 +84,7 @@ declare -a dotConfig=(
 ".config/ranger/rc.conf"
 ".config/ranger/rifle.conf"
 ".config/ranger/scope.sh"
+".config/rofi/config.rasi"
 ".config/starship.toml"
 )
 
