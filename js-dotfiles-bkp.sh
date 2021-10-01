@@ -28,7 +28,6 @@
 #### [MODULES] ####
 
 . /home/jjimenez/workspace/bash-scripts/modules/common.sh
-. /home/jjimenez/workspace/bash-scripts/modules/dotfiles.sh
 . /home/jjimenez/workspace/bash-scripts/modules/git.sh
 
 #### [DECLARATIONS AND DEFINITIONS] ####
