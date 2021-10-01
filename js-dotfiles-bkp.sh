@@ -85,6 +85,7 @@ declare -a dotConfig=(
 ".config/ranger/rc.conf"
 ".config/ranger/rifle.conf"
 ".config/ranger/scope.sh"
+".config/rofi/config.rasi"
 ".config/starship.toml"
 )
 
