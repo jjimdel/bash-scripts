@@ -1,13 +1,26 @@
 #!/usr/bin/env bash
-# ---
-# Title:        js.filex.sh
-# Description:  File analyzer
-# Author:       Julio Jimenez Delgado
-# License:      The MIT License (MIT)
-#				<https://github.com/jouleSoft/js-sh/blob/master/LICENSE>
-#               Copyright (c) <YEAR> Julio Jiménez Delgado
+# 
+# Title
+#   js-filex.sh
 #
-# Template:     js.script-args.sh <https://github.com/jouleSoft/js-ShellScripts/templates/>
+# Description
+#   File analyzer
+#
+# Contributor
+#   Julio Jimenez Delgado (jouleSoft)
+#
+# GitHub
+#   https://github.com/jouleSoft/bash-scripts.git
+#
+# License
+#   The MIT License (MIT)
+#   Copyright (c) 2019-2021 Julio Jiménez Delgado (jouleSoft)
+#
+# Template
+#   https://github.com/jouleSoft/bash-scripts/templates/args.sh 
+#
+# Dependencies 
+#   None
 #
 # Requirements: Arguments
 # 
@@ -26,250 +39,212 @@
 # Date:         14/12/2020
 # Change:       Disk usage is expressed in bytes, explicitly
 #
+# Version:      0.4
+# Author:       Julio Jimenez Delgado
+# Date:         06/10/2021
+# Change:       Output formated
+#
 
+#### [MODULES] ####
 
-#----------------------------------[Declarations and definitions]----------------------------------
+. /home/jjimenez/workspace/bash-scripts/modules/common.sh
 
-#Script info and arguments evaluation variables
-script_name="js.filex.sh"
-version="v.0.2"
-description="File analyzer"
+#### [DECLARATIONS AND DEFINITIONS] ####
 
-#Total arguments expected / introduced
-args=1
-args_in_array=("$@")
+#Script info
+declare script_name="js-filex.sh"
+declare version="v.0.4"
+declare description="File analyzer"
 
-#Arguments arrays: used on the help screen when args_check() function evals '1'.
-args_array=(
-	"target"
+#Number of arguments exptected
+declare -a args=1 
+declare -a args_in_array=("$@")
+
+#Arguments arrays: used on the help screen when
+#args_check() function evals '1'.
+declare -a args_array=(
+  "target"
 )
-args_definition_array=(
-	"File or directory to analyze"
+declare -a args_definition_array=(
+  "File or directory to analyze"
 )
 
 #Global operational variables
 # NONE
 
-#-------------------------------------------[Functions]--------------------------------------------
-
-#Script header
-header() 
-{
-	#Init color variables
-	NC='\033[0m'
-	LIGHT_GREY='\033[0;37m'
-	YELLOW='\033[1;33m'
-
-	echo 
-	printf "${LIGHT_GREY} $script_name ${YELLOW}$version ${LIGHT_GREY}- $description${NC}\n"
-	echo 
-}
-
-#Argument control
-args_check() 
-{
-	#When less arguments than expected
-	if [ "$#" -lt $args ]; then
-		echo " More arguments needed."
-		echo "     Expected:   $args"
-		echo "     Intruduced: $#"
-		echo 
-		echo " Syntax:"
-		echo "     $script_name ${args_array[*]}"
-		echo 
-		echo " Where:"
-		for (( i=0; i<$args; i++ ))
-		do
-			echo "     ${args_array[$i]} - ${args_definition_array[$i]}"
-		done
-		echo 
-
-		args_check_result=1
-
-	#When more arguments than expected
-	elif [ "$#" -gt $args ]; then
-		echo " More arguments than expected."
-		echo "     Expected:   $args"
-		echo "     Intruduced: $#"
-		echo 
-		echo " Syntax:"
-		echo "     $script_name ${args_array[*]}"
-		echo 
-		echo " Where:"
-		for (( i=0; i<$args; i++ ))
-		do
-			echo "     ${args_array[$i]} - ${args_definition_array[$i]}"
-		done
-		echo 
-        
-		#Less arguments than expected.
-		args_check_result=1
-	
-	#All arguments needed: OK.
-	else
-		args_check_result=0
-	fi
-}
+#### [FUNCTIONS] ####
 
 #Operational functions (if required)
 owner()
 {
-	echo "	Uid: 	$(stat $1 | grep 'Uid:'| cut -d ' ' -f6| tr -d '()')"
-	echo "	Gid: 	$(stat $1 | grep 'Uid:'| cut -d ' ' -f11| tr -d '()')"
-	echo ""
+  #Get owner information from file
+
+  echo -e "   ${PURPLE}Uid:${NC}  $(stat $1 | grep 'Uid:'| cut -d ' ' -f6| tr -d '()')"
+  echo -e "   ${PURPLE}Gid:${NC}  $(stat $1 | grep 'Uid:'| cut -d ' ' -f11| tr -d '()')"
+  echo ""
 }
 
-user_priv() # Checks group privileges
+user_priv() 
 {
-	local read_priv="";
-	local write_priv="";
-	local exec_priv="";
+  #Check file user privileges over the file
 
-	case $(ls -l $1|cut -c2) in
+  declare read_priv="";
+  declare write_priv="";
+  declare exec_priv="";
 
-		-) read_priv="No-read";;
-		r) read_priv="Read";;
+  case $(ls -l $1|cut -c2) in
 
-	esac
+    -) read_priv="No-read ";;
+    r) read_priv="Read    ";;
 
-	case $(ls -l $1|cut -c3) in
+  esac
 
-		-) write_priv="No-write";;
-		w) write_priv="Write";;
+  case $(ls -l $1|cut -c3) in
 
-	esac
+    -) write_priv="No-write ";;
+    w) write_priv="Write    ";;
 
-	case $(ls -l $1|cut -c4) in
+  esac
 
-		-) exec_priv="No-exec";;
-		x) exec_priv="Exec";;
-		
-	esac
+  case $(ls -l $1|cut -c4) in
 
-	echo "	User:	$read_priv, $write_priv, $exec_priv"
+    -) exec_priv="No-exec ";;
+    x) exec_priv="Exec    ";;
+
+  esac
+
+  echo -e "   ${PURPLE}User:${NC}     $read_priv $write_priv $exec_priv"
 }
 
-group_priv() # Checks group privileges
+group_priv()
 {
-	local read_priv="";
-	local write_priv="";
-	local exec_priv="";
+  #Check file group privileges
 
-	case $(ls -l $1|cut -c5) in
+  declare read_priv="";
+  declare write_priv="";
+  declare exec_priv="";
 
-		-) read_priv="No-read";;
-		r) read_priv="Read";;
+  case $(ls -l $1|cut -c5) in
 
-	esac
+    -) read_priv="No-read ";;
+    r) read_priv="Read    ";;
 
-	case $(ls -l $1|cut -c6) in
+  esac
 
-		-) write_priv="No-write";;
-		w) write_priv="Write";;
+  case $(ls -l $1|cut -c6) in
 
-	esac
+    -) write_priv="No-write ";;
+    w) write_priv="Write    ";;
 
-	case $(ls -l $1|cut -c7) in
+  esac
 
-		-) exec_priv="No-exec";;
-		x) exec_priv="Exec";;
-		
-	esac
+  case $(ls -l $1|cut -c7) in
 
-	echo "	Group:	$read_priv, $write_priv, $exec_priv"
+    -) exec_priv="No-exec ";;
+    x) exec_priv="Exec    ";;
+
+  esac
+
+  echo -e "   ${PURPLE}Group:${NC}    $read_priv $write_priv $exec_priv"
 }
 
-others_priv() # Checks group privileges
+others_priv()
 {
-	local read_priv="";
-	local write_priv="";
-	local exec_priv="";
+  #Check file other privileges
 
-	case $(ls -l $1|cut -c8) in
+  declare read_priv="";
+  declare write_priv="";
+  declare exec_priv="";
 
-		-) read_priv="No-read";;
-		r) read_priv="Read";;
+  case $(ls -l $1|cut -c8) in
 
-	esac
+    -) read_priv="No-read ";;
+    r) read_priv="Read    ";;
 
-	case $(ls -l $1|cut -c9) in
+  esac
 
-		-) write_priv="No-write";;
-		w) write_priv="Write";;
+  case $(ls -l $1|cut -c9) in
 
-	esac
+    -) write_priv="No-write ";;
+    w) write_priv="Write    ";;
 
-	case $(ls -l $1|cut -c10) in
+  esac
 
-		-) exec_priv="No-exec";;
-		x) exec_priv="Exec";;
-		
-	esac
+  case $(ls -l $1|cut -c10) in
 
-	echo "	Others:	$read_priv, $write_priv, $exec_priv"
+    -) exec_priv="No-exec ";;
+    x) exec_priv="Exec    ";;
+
+  esac
+
+  echo -e "   ${PURPLE}Others:${NC}   $read_priv $write_priv $exec_priv"
 }
 
 disk_usage()
 {
-	echo "	$(ls -lh $1 | cut -d ' ' -f5)"
+  #Get file disk usage
+
+  echo -e "${PURPLE}   $(ls -lh $1 | cut -d ' ' -f5)"
 }
 
 md5_hash()
 {
-	echo "	$(md5sum $1 | cut -d ' ' -f1)"
+  #Get file md5 hashcode
+
+  echo -e "${PURPLE}   $(md5sum $1 | cut -d ' ' -f1)${NC}"
 }
 
 #Main function
 main()
 {
-	if [ -e "$1" ]; then
-		echo " File type:"
-		echo "	$(file $1 | cut -d ':' -f2)"
-		echo ""
+  if [ -e "$1" ]; then
+    echo -e "${LIGHT_GREEN} File type:${NC}"
+    echo -e "${CYAN}  $(file $1 | cut -d ':' -f2)${NC}"
+    echo ""
 
-		if [ ! -d $1 ]; then
-			echo " Ownership:"
+    if [ ! -d $1 ]; then
+      echo -e "${LIGHT_GREEN} Ownership:${NC}"
 
-			owner "$1"
+      owner "$1"
 
-			echo " Privileges:"
+      echo -e "${LIGHT_GREEN} Privileges:${NC}"
 
-			user_priv "$1"
-			group_priv "$1"
-			others_priv "$1"
-			
-			echo ""
+      user_priv "$1"
+      group_priv "$1"
+      others_priv "$1"
 
-			echo " Disk usage:"
-			echo "$(disk_usage "$1")B"
+      echo ""
 
-			echo ""
+      echo -e "${LIGHT_GREEN} Disk usage:${NC}"
+      echo "$(disk_usage "$1")B"
 
-			echo " md5 hash:"
-			md5_hash "$1"
+      echo ""
 
-			echo ""
-		fi
+      echo -e "${LIGHT_GREEN} MD5 hashcode:${NC}"
+      md5_hash "$1"
 
-	else
-		echo " $1: No such file"
-		echo ""
-	fi
+      echo ""
+    fi
+
+  else
+    echo " $1: No such file or directory"
+    echo ""
+  fi
 }
 
-#-------------------------------------------[Execution]--------------------------------------------
+#### [EXECUTION] ####
 
 #Printing the header
-header
+header "$script_name" "$version" "$description"
 
 #Arguments number evaluation
 args_check ${args_in_array[@]}
 
 if [ $args_check_result -eq 0 ]; then
-	main "$@"
+  main "$@"
 fi
 
-#------------------------------------------[Finalization]------------------------------------------
+#### [FINALIZATION] ####
 
 #Script header
 unset script_name
