@@ -46,6 +46,9 @@ Initial development
 
 ### js-dotfiles-bkp.sh
 
+**v1.1**  
+dotFiles arrays moved to '~/.config/js-dotfiles.conf.sh' as a dotFile
+
 **v1.0**  
 Output formated
 
