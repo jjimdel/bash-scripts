@@ -95,7 +95,6 @@ header "$script_name" "$version" "$description"
 #Main function execution
 main
 
-
 #### [FINALIZATION] ####
 
 #Script header
