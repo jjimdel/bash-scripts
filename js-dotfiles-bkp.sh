@@ -93,7 +93,12 @@ main()
 header "$script_name" "$version" "$description"
 
 #Main function execution
-main
+if [ -e ~/.config/js-dotfiles-bkp.conf.sh ]; then
+  main
+else
+  echo -e " configuration file not found\n"
+  exit 1
+fi
 
 #### [FINALIZATION] ####
 
