@@ -97,8 +97,8 @@ deps_check()
   declare deps="$#"
 
   if [[ $deps -gt 0 ]]; then
-    #When number of dependencies are more than zero, they will be checked
 
+    #When number of dependencies is more than zero, they will be checked
     for d in "$@"; do
       if [[ $(which "$d" > "/dev/null  2>&1") -gt 0 ]]; then
         #If the dependency in $d is not installed,
