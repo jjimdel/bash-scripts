@@ -24,7 +24,6 @@
 #   <dependency | None>
 #
 
-
 #### [MODULES] ####
 
 . $HOME/workspace/bash-scripts/modules/common.sh
@@ -80,7 +79,7 @@ deps_check "${deps_array[@]}"
 args_check "$@"
 
 #Main function execution
-main
+main "$@"
 
 #### [FINALIZATION] ####
 
