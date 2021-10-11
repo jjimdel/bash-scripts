@@ -20,19 +20,21 @@
 # Template
 #   https://github.com/jouleSoft/bash-scripts/templates/noargs.sh 
 #
-# Dependencies 
+# Dependencies (packages)
 #   git
 #   coreutils
+#
+# Configuration files needed
 #   ~/.config/js-dotfiles-bkp.conf.sh
 #
 
 #### [MODULES] ####
 
-. /home/jjimenez/workspace/bash-scripts/modules/common.sh
-. /home/jjimenez/workspace/bash-scripts/modules/git.sh
+. $HOME/workspace/bash-scripts/modules/common.sh
+. $HOME/workspace/bash-scripts/modules/git.sh
 
 # Preferences module to import the arrays
-. /home/jjimenez/.config/js-dotfiles-bkp.conf.sh
+. $HOME/.config/js-dotfiles-bkp.conf.sh
 
 #### [DECLARATIONS AND DEFINITIONS] ####
 
@@ -41,8 +43,9 @@ declare script_name="js-dotfiles-bkp.sh"
 declare version="v.1.1"
 declare description="Create dotfiles backup at GitHub"
 
-#Dependencies array: used for checking the dependencies
-declare -a deps_array=(
+#Dependencies array: used for checking the dependencies.
+#Declared in 'common.sh' module.
+deps_array=(
   "git"
   "dirname"
 )
@@ -94,26 +97,14 @@ main()
 #Printing the header
 header "$script_name" "$version" "$description"
 
+#Check if config file exists (when needed)
+config_file_check "$HOME/.config/js-dotfiles-bkp.conf.sh"
 
 #Dependecy evaluation
 deps_check ${deps_array[@]}
 
-if [ -e ~/.config/js-dotfiles-bkp.conf.sh ]; then
-  if [[ ${#deps_check_array[@]} -eq 0 ]]; then
-    #Main function execution
-    main
-  else
-    echo -e " Dependencies listed below are needed:"
-    for e in "${deps_check_array[@]}"; do
-      echo -e "   $e"
-    done
-
-    echo; exit 2
-  fi
-else
-  echo -e " configuration file not found\n"
-  exit 1
-fi
+#Main function execution
+main
 
 #### [FINALIZATION] ####
 
@@ -121,6 +112,9 @@ fi
 unset script_name
 unset version
 unset description
+
+#Dependency checker
+unset deps_array
 
 #Operational variables (if any)
 # NONE
