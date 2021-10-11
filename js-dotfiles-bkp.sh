@@ -37,13 +37,15 @@
 #### [DECLARATIONS AND DEFINITIONS] ####
 
 #Script info and arguments evaluation variables
-declare script_name
-declare version
-declare description
+declare script_name="js-dotfiles-bkp.sh"
+declare version="v.1.1"
+declare description="Create dotfiles backup at GitHub"
 
-script_name="js-dotfiles-bkp.sh"
-version="v.1.1"
-description="Create dotfiles backup at GitHub"
+#Dependencies array: used for checking the dependencies
+declare -a deps_array=(
+  "git"
+  "dirname"
+)
 
 #Global operational variables
 # NONE
@@ -78,7 +80,7 @@ main()
   done
 
   echo -e "\n"
-  
+
   dotFilesCopy_legend
   echo
 
@@ -92,9 +94,26 @@ main()
 #Printing the header
 header "$script_name" "$version" "$description"
 
-#Main function execution
-main
 
+#Dependecy evaluation
+deps_check ${deps_array[@]}
+
+if [ -e ~/.config/js-dotfiles-bkp.conf.sh ]; then
+  if [[ ${#deps_check_array[@]} -eq 0 ]]; then
+    #Main function execution
+    main
+  else
+    echo -e " Dependencies listed below are needed:"
+    for e in "${deps_check_array[@]}"; do
+      echo -e "   $e"
+    done
+
+    echo; exit 2
+  fi
+else
+  echo -e " configuration file not found\n"
+  exit 1
+fi
 
 #### [FINALIZATION] ####
 

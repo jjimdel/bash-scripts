@@ -27,6 +27,10 @@ declare LIGHT_WHITE='\033[1;37m'
 #Dark colors
 declare DARK_GREY='\033[1;30m'
 
+#Dependencies check array: used in the help screen for enumerating the missing dependencies
+#it will be completed in 'deps_check()' function
+declare -a deps_check_array
+
 #### [FUNCTIONS] ####
 
 #Script header
@@ -97,13 +101,13 @@ deps_check()
   declare deps="$#"
 
   if [[ $deps -gt 0 ]]; then
-    #When number of dependencies are more than zero, they will be checked
 
+    #When number of dependencies is more than zero, they will be checked
     for d in "$@"; do
-      if [[ $(which "$d" > "/dev/null  2>&1") -gt 0 ]]; then
-        #If the dependency in $d is not installed,
-        #it will be stored in '${deps_check_array}'
+      which "$d" > /dev/null  2>&1
+      if [ "$?" -gt 0 ]; then
 
+        #If the dependency in $d is not installed, it will be stored in '${deps_check_array}'
         deps_check_array+=("$d")
 
       fi
