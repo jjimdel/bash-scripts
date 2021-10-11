@@ -23,21 +23,27 @@
 # Dependencies 
 #   <dependency | None>
 #
+# Configuration files needed
+#   <file | None>
+#
 
 #### [MODULES] ####
 
-. /home/jjimenez/workspace/bash-scripts/modules/common.sh
+. $HOME/workspace/bash-scripts/modules/common.sh
 
 #### [DECLARATIONS AND DEFINITIONS] ####
 
 #Script info and arguments evaluation variables
-declare script_name
-declare version
-declare description
+declare script_name=""
+declare version=""
+declare description=""
 
-script_name=""
-version="v0.1"
-description=""
+#Dependencies array: used for checking the dependencies.
+#Declared in 'common.sh' module.
+deps_array=(
+  "git"
+  "dirname"
+)
 
 #Global operational variables
 # NONE
@@ -60,9 +66,14 @@ main()
 #Printing the header
 header "$script_name" "$version" "$description"
 
+#Check if config file exists (when needed)
+# config_file_check "<config_file>"
+
+#Dependecy evaluation
+deps_check ${deps_array[@]}
+
 #Main function execution
 main
-
 
 #### [FINALIZATION] ####
 
@@ -70,6 +81,9 @@ main
 unset script_name
 unset version
 unset description
+
+#Dependency checker
+unset deps_array
 
 #Operational variables (if any)
 #

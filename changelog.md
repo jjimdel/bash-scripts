@@ -79,3 +79,18 @@ Check GIT status of all dotfile repos
 
 **v0.1**  
 Initial development
+
+### js-download-links.sh
+
+**v0.4**  
+Output directory needs to be explicitly typed as an argument
+
+**v0.3**  
+Changing the dependency checking: 'deps_check()' function
+
+**v0.2**  
+Checking dependency: youtube-dl
+
+**v0.1**  
+Initial development
+

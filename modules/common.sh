@@ -31,24 +31,58 @@ declare DARK_GREY='\033[1;30m'
 #it will be completed in 'deps_check()' function
 declare -a deps_check_array
 
+#Dependencies array: used for checking the dependencies. It must be initialized in every script
+declare -a deps_array
+
+#Arguments arrays: used on the help screen when args_check() function evals '1'.
+#Lists the required arguments
+declare -a args_array
+#Lists the required arguments description
+declare -a args_definition_array
+
+#Total arguments expected / introduced
+declare args
+
+#Dependencies array: used for checking the dependencies
+#Leave empty if there is not any dependency
+declare -a deps_array
+
 #### [FUNCTIONS] ####
 
 #Script header
 header()
 {
-  # -.- [PARAMETERS DESCRIPTION] -.-
-  # $1 - script_name
-  # $2 - version
-  # $3 - description
+  # 
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # updated:      08-10-2019
+  # change:       Initial development
+  #
+  # dependencies
+  #   - git
+  # 
+  # parameters
+  #   - $1 - script_name
+  #   - $2 - version
+  #   - $3 - description
+  #
 
-  echo
-  echo -e "${LIGHT_GREY} $1 ${YELLOW}$2 ${LIGHT_GREY}- $3${NC}\n"
-  echo
+  echo -e "\n${LIGHT_GREY} $1 ${YELLOW}$2 ${LIGHT_GREY}- $3${NC}\n"
 }
 
 #Argument control
 args_check()
 {
+  # 
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # updated:      08-11-2019
+  # change:       Initial development
+  #
+  # dependencies
+  #   - None
+  # 
+
   if [ "$#" -lt "$args" ]; then
     #When less arguments than expected: help text is shown
 
@@ -66,7 +100,7 @@ args_check()
     done
     echo
 
-    args_check_result=1
+    exit 3
 
   elif [ "$#" -gt "$args" ]; then
     #When more arguments than expected: help text is shown
@@ -85,18 +119,31 @@ args_check()
     done
     echo
 
-    args_check_result=1
-
-  else
-    #All arguments needed: OK.
-
-    args_check_result=0
+    exit 3
   fi
 }
 
 #Dependency control
 deps_check()
 {
+  # 
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # updated:      08-11-2019
+  # change:       Initial development
+  #
+  # dependencies
+  #   - which
+  # 
+  # parameters
+  #   - $@ from 'deps_array' declared in every main script
+  #
+  # output
+  #   - if there is any unfullfilled dependency, the function
+  #     adds it to 'deps_check_array' (look DECLARATIONS AND
+  #     DEFINITIONS section)
+  #
+
   #Number of software dependencies
   declare deps="$#"
 
@@ -112,5 +159,38 @@ deps_check()
 
       fi
     done
+  fi
+
+  if [[ ${#deps_check_array[@]} -ne 0 ]]; then
+    echo -e " Dependencies listed below are needed:"
+    for e in "${deps_check_array[@]}"; do
+      echo -e "   $e"
+    done
+
+    echo; exit 2
+  fi
+}
+
+config_file_check()
+{
+  # 
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # updated:      11-10-2021
+  # change:       Initial development
+  #
+  # dependencies
+  #   - None
+  # 
+  # parameters
+  #   - $1 - Configuration file
+  #
+  # output
+  #   - if there is no configuration file, exits with 1
+  #
+
+  if [ ! -e "$1" ]; then
+    echo -e " configuration file not found\n"
+    exit 1
   fi
 }
