@@ -2,6 +2,8 @@
 
 #### [DECLARATIONS AND DEFINITIONS] ####
 
+#-.- Colors -.-
+
 #No color
 declare NC='\033[0m'
 
@@ -27,12 +29,22 @@ declare LIGHT_WHITE='\033[1;37m'
 #Dark colors
 declare DARK_GREY='\033[1;30m'
 
+#-.- Header -.-
+#Script info and arguments evaluation variables
+declare script_name
+declare version
+declare description
+
+#-.- Dependencies checking -.-
+
 #Dependencies check array: used in the help screen for enumerating the missing dependencies
 #it will be completed in 'deps_check()' function
 declare -a deps_check_array
 
 #Dependencies array: used for checking the dependencies. It must be initialized in every script
 declare -a deps_array
+
+#-.- Arguments checking -.-
 
 #Arguments arrays: used on the help screen when args_check() function evals '1'.
 #Lists the required arguments
@@ -47,7 +59,48 @@ declare args
 #Leave empty if there is not any dependency
 declare -a deps_array
 
+#-.- Logging -.-
+
+#String to log in
+declare log_write
+
 #### [FUNCTIONS] ####
+
+common_unset()
+{
+  #Colors
+  unset NC
+  unset BLACK
+  unset BLUE
+  unset CYAN
+  unset GREEN
+  unset ORANGE
+  unset PURPLE
+  unset RED
+  unset YELLOW
+  unset LIGHT_BLUE
+  unset LIGHT_CYAN
+  unset LIGHT_GREEN
+  unset LIGHT_GREY
+  unset LIGHT_PURPLE
+  unset LIGHT_RED
+  unset LIGHT_WHITE
+  unset DARK_GREY
+  #Header
+  unset script_name
+  unset version
+  unset description
+  #Dependencies checking
+  unset deps_check_array
+  unset deps_array
+  #Arguments checking
+  unset args_array
+  unset args_definition_array
+  unset args
+  unset deps_array
+  #Logging
+  unset log_write
+}
 
 #Script header
 header()
@@ -193,4 +246,58 @@ config_file_check()
     echo -e " configuration file not found\n"
     exit 1
   fi
+}
+
+log_header()
+{
+  # 
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # updated:      12-10-2021
+  # change:       Initial development
+  #
+  # dependencies
+  #   - None
+  # 
+  # parameters
+  #   - $1 - Log directory
+  #
+  # output
+  #   - write log strings to a text file
+  #
+
+  #Logfile
+  declare log_file="$script_name-$version.log"
+
+  if [ ! -e "$1/$log_file" ]; then
+    echo "# $script_name $version log file" >> "$1/$log_file"
+    echo "---" >> "$1/$log_file"
+  fi
+}
+
+log_in()
+{
+  # 
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # updated:      12-10-2021
+  # change:       Initial development
+  #
+  # dependencies
+  #   - None
+  # 
+  # parameters
+  #   - $1 - String to log in
+  #   - $2 - Log directory
+  #
+  # output
+  #   - write log strings to a text file
+  #
+
+  #Logfile
+  declare log_file="$script_name-$version.log"
+
+  declare time_stamp="$(date +%d-%m-%y' '%H:%M:%S' '%Z)"
+
+  echo "$time_stamp: $1" >> "$2/$log_file"
 }
