@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+#### [DECLARATIONS AND DEFINITIONS] ####
+# None
+
+#### [FUNCTIONS] ####
+
 function_name()
 {
   #
