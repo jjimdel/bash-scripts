@@ -77,13 +77,8 @@ main
 
 #### [FINALIZATION] ####
 
-#Script header
-unset script_name
-unset version
-unset description
-
-#Dependency checker
-unset deps_array
+#Unset common.sh module variables
+common_unset
 
 #Operational variables (if any)
 #
