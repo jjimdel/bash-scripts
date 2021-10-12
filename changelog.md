@@ -97,3 +97,16 @@ Checking dependency: youtube-dl
 **v0.1**  
 Initial development
 
+### js-filex.sh
+
+**v0.4**  
+Output formated
+
+**v0.3**  
+Disk usage is expressed in bytes, explicitly
+
+**v0.2**  
+Functions 'owner()' and 'disk_usage()' has been created
+
+**v0.1**  
+Initial development
