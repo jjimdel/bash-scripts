@@ -38,6 +38,9 @@ First commit
 ## Scripts
 ### js-check-ip.sh
 
+**v0.3**  
+Loging code exported to common.sh module
+
 **v0.2**  
 Module 'general.sh' updated to 'common.sh'
 
