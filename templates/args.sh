@@ -35,11 +35,18 @@ declare script_name=""
 declare version=""
 declare description=""
 
+#Dependencies array: used for checking the dependencies.
+#Declared in 'common.sh' module.
+deps_array=(
+  "youtube-dl"
+)
+
 #Arguments arrays: used on the help screen when args_check() function evals '1'.
 args_array=(
   "arg1"
   "arg2"
 )
+
 args_definition_array=(
   "arg1 description"
   "arg2 description"
