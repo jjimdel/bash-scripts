@@ -31,9 +31,9 @@
 #### [DECLARATIONS AND DEFINITIONS] ####
 
 #Script info and arguments evaluation variables
-declare script_name=""
-declare version=""
-declare description=""
+script_name=""
+version=""
+description=""
 
 #Dependencies array: used for checking the dependencies.
 #Declared in 'common.sh' module.
