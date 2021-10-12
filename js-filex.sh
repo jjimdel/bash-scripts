@@ -237,26 +237,21 @@ main()
 #Printing the header
 header "$script_name" "$version" "$description"
 
-#Arguments number evaluation
-args_check ${args_in_array[@]}
+#Check if config file exists (when needed)
+# config_file_check "<config_file>"
 
-if [ $args_check_result -eq 0 ]; then
-  main "$@"
-fi
+#Dependency evalutation
+deps_check "${deps_array[@]}"
+
+#Arguments number evaluation
+args_check "$@"
+
+#Main function execution
+main "$@"
 
 #### [FINALIZATION] ####
 
-#Script header
-unset script_name
-unset version
-unset description
-
-#Argument evaluation
-unset args
-unset args_in_array
-unset args_array
-unset args_definition_array
-unset args_check_result
+common_unset
 
 #Operational variables (if any)
 #

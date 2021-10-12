@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+#### [DECLARATIONS AND DEFINITIONS] ####
+# None
+
+#### [FUNCTIONS] ####
+
 gitCommit()
 {
   # 
@@ -80,7 +85,7 @@ gitCheck_and_commit()
   # change:       text formated
   #
   # parameters
-  #   - $1 : repository path
+  #   - $1 : repository url
   #
 
   # if repository exists

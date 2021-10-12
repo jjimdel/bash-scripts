@@ -35,11 +35,18 @@ declare script_name="js-download-links.sh"
 declare version="v0.4"
 declare description="Downloading links from a text file using youtube-dl"
 
+#Dependencies array: used for checking the dependencies.
+#Declared in 'common.sh' module.
+deps_array=(
+  "youtube-dl"
+)
+
 #Arguments arrays: used on the help screen when args_check() function evals '1'.
 args_array=(
   "links_file"
   "output_dir"
 )
+
 args_definition_array=(
   "list of links for downloading"
   "output directory where files are going to be downloaded"
