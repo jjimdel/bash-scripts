@@ -76,7 +76,7 @@ main()
 
   echo -e "${CYAN} Legend:${NC}\n"
   echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The repo is up to date"
-  echo -e "  ${YELLOW}[   CP   ]${NC}: The repo needs a check\n"
+  echo -e "  ${YELLOW}[   CK   ]${NC}: The repo needs to be checked\n"
 }
 
 #### [EXECUTION] ####
