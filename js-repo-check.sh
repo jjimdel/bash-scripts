@@ -60,17 +60,23 @@ main()
 {
   declare currentDir="$(pwd)"
 
+  echo -e "${CYAN} Status of every repository:${NC}\n"
+
   for r in ${repo_dir_array[@]}; do
     cd "$r"
  
     if [ $(git status --short | wc -c) != 0 ]; then
-      echo -e "${YELLOW}[   CK   ]${NC} $r"
+      echo -e "${YELLOW}  [   CK   ]${NC} $r"
     else
-      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $r"
+      echo -e "${LIGHT_GREEN}  [   OK   ]${NC} $r"
     fi
   done
 
   echo
+
+  echo -e "${CYAN} Legend:${NC}\n"
+  echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The repo is up to date"
+  echo -e "  ${YELLOW}[   CP   ]${NC}: The repo needs a check"
 }
 
 #### [EXECUTION] ####
