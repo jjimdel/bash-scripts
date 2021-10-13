@@ -2,10 +2,10 @@
 
 # 
 # Title
-#   <script_name>
+#   js-repo-check.sh
 #
 # Description
-#   <short_description>
+#   Check every Git repository from a list
 #
 # Contributor
 #   Julio Jimenez Delgado (jouleSoft)
@@ -18,42 +18,34 @@
 #   Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
 #
 # Template
-#   https://github.com/jouleSoft/bash-scripts/templates/args.sh 
+#   https://github.com/jouleSoft/bash-scripts/templates/noargs.sh 
 #
 # Dependencies 
-#   <dependency | None>
+#   git
+#
+# Configuration files needed
+#   ~/.config/js-check-repo.conf.sh
 #
 
 #### [MODULES] ####
 
 . $HOME/workspace/bash-scripts/modules/common.sh
 
+#Configuration module
+. $HOME/.config/js-check-repo.conf.sh
+
 #### [DECLARATIONS AND DEFINITIONS] ####
 
 #Script info and arguments evaluation variables
-script_name=""
-version=""
-description=""
+declare script_name="js-check-repo.sh"
+declare version="0.1"
+declare description="Check every Git repository from a list"
 
 #Dependencies array: used for checking the dependencies.
 #Declared in 'common.sh' module.
 deps_array=(
-  "youtube-dl"
+  "git"
 )
-
-#Arguments arrays: used on the help screen when args_check() function evals '1'.
-args_array=(
-  "arg1"
-  "arg2"
-)
-
-args_definition_array=(
-  "arg1 description"
-  "arg2 description"
-)
-
-#Total arguments expected / introduced
-args=${#args_array[@]}
 
 #Global operational variables
 # NONE
@@ -61,13 +53,23 @@ args=${#args_array[@]}
 #### [FUNCTIONS] ####
 
 #Operational functions (if required)
-#
+# NONE
 
 #Main function
 main()
 {
-  echo
-  #Write main code block here!!
+  declare currentDir="$(pwd)"
+
+  for r in ${repo_dir_array[@]}; do
+    cd "$r"
+ 
+    if [ $(git status --short | wc -c) != 0 ]; then
+      echo -e "${YELLOW}[   CK   ]${NC} $r"
+    else
+      echo -e "${LIGHT_GREEN}[   OK   ]${NC} $r"
+    fi
+  done
+
   echo
 }
 
@@ -77,16 +79,13 @@ main()
 header "$script_name" "$version" "$description"
 
 #Check if config file exists (when needed)
-# config_file_check "<config_file>"
+config_file_check "$HOME/.config/js-check-repo.conf.sh"
 
-#Dependency evalutation
-deps_check "${deps_array[@]}"
-
-#Arguments number evaluation
-args_check "$@"
+#Dependecy evaluation
+deps_check ${deps_array[@]}
 
 #Main function execution
-main "$@"
+main
 
 #### [FINALIZATION] ####
 
@@ -95,3 +94,4 @@ common_unset
 
 #Operational variables (if any)
 #
+
