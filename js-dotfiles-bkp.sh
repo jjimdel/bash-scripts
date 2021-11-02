@@ -40,7 +40,7 @@
 
 #Script info and arguments evaluation variables
 declare script_name="js-dotfiles-bkp.sh"
-declare version="v.1.1"
+declare version="v.1.2"
 declare description="Create dotfiles backup at GitHub"
 
 #Dependencies array: used for checking the dependencies.
@@ -71,6 +71,10 @@ main()
   done
 
   for d in ${dotConfig[@]}; do
+    dotFilesCopy $d
+  done
+
+  for d in ${dotConfig_i3wm[@]}; do
     dotFilesCopy $d
   done
 
