@@ -119,7 +119,7 @@ dotFilesCopy()
   # updated:      01-10-2021
   # change:       first copy to repo problem solved
   #
-  # dependencies: coreutils
+  # dependencies: coreutils [dirname]
   # 
 
   declare output
