@@ -123,7 +123,7 @@ main()
   root_only
 
   # Adding repos
-  slimbook_repo
+  #slimbook_repo
   githubCli_repo
 
   # Installing software
