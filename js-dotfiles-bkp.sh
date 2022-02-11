@@ -74,6 +74,10 @@ main()
     dotFilesCopy $d
   done
 
+  for d in ${dotConfig_conky[@]}; do
+    dotFilesCopy $d
+  done
+
   for d in ${dotConfig_i3wm[@]}; do
     dotFilesCopy $d
   done
