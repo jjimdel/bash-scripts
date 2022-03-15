@@ -29,9 +29,11 @@
 #
 
 #### [MODULES] ####
+declare mod_dir
+mod_dir=$(dirname "$0")
 
-. $HOME/workspace/bash-scripts/modules/common.sh
-. $HOME/workspace/bash-scripts/modules/git.sh
+. "$mod_dir/modules/common.sh"
+. "$mod_dir/modules/git.sh"
 
 # Preferences module to import the arrays
 . $HOME/.config/js-dotfiles-bkp.conf.sh
@@ -66,28 +68,28 @@ main()
   repo="$HOME/workspace/dotfiles"
 
   echo -e "${CYAN} Backup to: [$HOME/workspace/dotfiles]${NC}\n"
-  for d in ${dotFiles[@]}; do
-    dotFilesCopy $d
+  for d in "${dotFiles[@]}"; do
+    dotFilesCopy "$d"
   done
 
-  for d in ${dotConfig[@]}; do
-    dotFilesCopy $d
+  for d in "${dotConfig[@]}"; do
+    dotFilesCopy "$d"
   done
 
-  for d in ${dotConfig_conky[@]}; do
-    dotFilesCopy $d
+  for d in "${dotConfig_conky[@]}"; do
+    dotFilesCopy "$d"
   done
 
-  for d in ${dotConfig_i3wm[@]}; do
-    dotFilesCopy $d
+  for d in "${dotConfig_i3wm[@]}"; do
+    dotFilesCopy "$d"
   done
 
-  for d in ${dotDoom[@]}; do
-    dotFilesCopy $d
+  for d in "${dotDoom[@]}"; do
+    dotFilesCopy "$d"
   done
 
-  for d in ${dotLocal[@]}; do
-    dotFilesCopy $d
+  for d in "${dotLocal[@]}"; do
+    dotFilesCopy "$d"
   done
 
   echo -e "\n"
@@ -109,7 +111,7 @@ header "$script_name" "$version" "$description"
 config_file_check "$HOME/.config/js-dotfiles-bkp.conf.sh"
 
 #Dependecy evaluation
-deps_check ${deps_array[@]}
+deps_check "${deps_array[@]}"
 
 #Main function execution
 main
