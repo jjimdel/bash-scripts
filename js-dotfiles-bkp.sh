@@ -88,10 +88,6 @@ main()
     dotFilesCopy "$d"
   done
 
-  for d in "${dotLocal[@]}"; do
-    dotFilesCopy "$d"
-  done
-
   echo -e "\n"
 
   dotFilesCopy_legend
