@@ -154,6 +154,17 @@ dotFilesCopy()
   echo -e "  $output"
 }
 
+dotFiles_sync()
+{
+  # Copy the dotfiles directories recursively to the repo
+  rsync --verbose --info=stats1 --archive --update \
+    --recursive "$HOME/.config/$1" "$2/" \
+    --backup --backup-dir="$2/backup"
+  # Commit and push changes adding the current date
+
+  echo
+}
+
 dotFilesCopy_legend()
 {
   # 
