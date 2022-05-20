@@ -58,6 +58,11 @@ MOD_DIR="$(dirname "$0")/modules"
 # shellcheck source=./modules/common.sh
 . "$MOD_DIR"/git.sh
 
+if [ -f "$HOME/.config/js-sync-dotfiles.conf.sh" ]; then
+  # shellcheck source=$HOME/.config/js-sync-dotfiles.conf.sh
+  . "$HOME/.config/js-sync-dotfiles.conf.sh"
+fi
+
 # -------------------------------------------------------------------
 #   DECLARATIONS AND DEFINITIONS
 # -------------------------------------------------------------------
@@ -77,8 +82,7 @@ deps_array=(
 log_dir="$(dirname $0)/log"
 
 # Global operational variables
-declare source=""
-declare destination=""
+# None
 
 # -------------------------------------------------------------------
 #   OPERATIONAL FUNCTIONS
@@ -148,12 +152,11 @@ check_arguments()
   fi
 
   declare help=""
+  declare source=""
+  declare destination=""
 
-  while getopts :hs:d: options; do
+  while getopts :h options; do
     case "$options" in
-      d) destination="$OPTARG";;
-      s) source="$OPTARG";;
-
       h) help="true";;
 
       :) echo -e "  -$OPTARG needs a value\n"

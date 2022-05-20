@@ -154,15 +154,33 @@ dotFilesCopy()
   echo -e "  $output"
 }
 
-dotFiles_sync()
+sync_data()
 {
-  # Copy the dotfiles directories recursively to the repo
-  rsync --verbose --info=stats1 --archive --update \
-    --recursive "$HOME/.config/$1" "$2/" \
-    --backup --backup-dir="$2/backup"
-  # Commit and push changes adding the current date
+  #
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # created:      20-05-2022
+  #
+  # dependencies: rsync
+  #
+  # arguments:
+  #    - '$1':    <source_file | source_directory>
+  #    - '$2':    <dest_directory>
+  #
 
-  echo
+  # Sync the dotfiles directories recursively to the repo
+  rsync \
+    --verbose \
+    --info=stats1 \
+    --archive \
+    --update \
+    --recursive \
+    --backup \
+    --backup-dir="$2/backup" \
+    # Source
+    "$1" \
+    # Destination
+    "$2/" \
 }
 
 dotFilesCopy_legend()
