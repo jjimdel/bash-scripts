@@ -53,15 +53,10 @@ declare MOD_DIR
 MOD_DIR="$(dirname "$0")/modules"
 
 # shellcheck source=./modules/common.sh
-. "$MOD_DIR"/common.sh
+source "$MOD_DIR"/common.sh
 
 # shellcheck source=./modules/common.sh
-. "$MOD_DIR"/git.sh
-
-if [ -f "$HOME/.config/js-sync-dotfiles.conf.sh" ]; then
-  # shellcheck source=$HOME/.config/js-sync-dotfiles.conf.sh
-  . "$HOME/.config/js-sync-dotfiles.conf.sh"
-fi
+#source "$MOD_DIR"/git.sh
 
 # -------------------------------------------------------------------
 #   DECLARATIONS AND DEFINITIONS
@@ -100,21 +95,64 @@ main()
 
   # log_header "$log_dir"
 
+  # shellcheck source=$HOME/.config/js-sync-dotfiles.conf.sh
+  source "$HOME/.config/js-sync-dotfiles.conf"
+
+  #Printing the header
+  header "$script_name" "$version" "$description"
+
   check_arguments "$@"
 
-  sync_data $source $destination
 }
 
 # ===  FUNCTION  ====================================================
-#         NAME: <function_name>
-#  DESCRIPTION: <short_description>
-#         TYPE: <operational | help | other>
+#         NAME: sync_data
+#  DESCRIPTION: Sync data using rsync
+#         TYPE: operational
 # ===================================================================
 
-#function_name()
-#{
-#  Write code here!!
-#}
+sync_data()
+{
+  #
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # created:      20-05-2022
+  #
+  # dependencies: rsync
+  #
+  # arguments:
+  #    - '$1':    <source_directory>
+  #    - '$2':    <dest_directory>
+  #
+
+  # dotFilles array from js-sync-dotfiles.conf
+  for s in ${dotFiles[@]}; do
+    if [ -e "$HOME/$s" ]; then
+      echo "$s" >> /tmp/js-sync-dotfiles.include.tmp
+    else
+      echo "Not found: $s"
+    fi
+  done
+
+  for s in ${exclude[@]}; do
+      echo "$s" >> /tmp/js-sync-dotfiles.exclude.tmp
+  done
+
+
+  # Sync the dotfiles directories recursively to the repo
+  rsync \
+    --verbose \
+    --info=stats1 \
+    --archive \
+    --update \
+    --recursive \
+    --backup \
+    --backup-dir="$2/backup" \
+    --files-from=/tmp/js-sync-dotfiles.include.tmp \
+    --exclude-from=/tmp/js-sync-dotfiles.exclude.tmp \
+    "$1" \
+    "$2/"
+}
 
 
 # ===  FUNCTION  ====================================================
@@ -126,7 +164,7 @@ main()
 print_help()
 {
   echo "  Usage:
-    $0 -h
+    $script_name -h
 
   Options:
 
@@ -143,17 +181,12 @@ print_help()
 
 check_arguments()
 {
-  if [ "$#" -eq 0 ]; then
-    echo -e "  Arguments expected\n"
-
-    print_help
-
-    exit 3
-  fi
-
   declare help=""
-  declare source=""
-  declare destination=""
+  declare sync=""
+
+  if [ "$#" -eq 0 ]; then
+    sync="true"
+  fi
 
   while getopts :h options; do
     case "$options" in
@@ -180,26 +213,27 @@ check_arguments()
     print_help
     exit 0
   fi
+
+  if [ -n "$sync" ]; then
+    [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
+    [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
+
+    sync_data $HOME/ $destination
+
+    exit 0
+  fi
+
 }
 
 # -------------------------------------------------------------------
 #   EXECUTION
 # -------------------------------------------------------------------
 
-#Printing the header
-header "$script_name" "$version" "$description"
-
 # Check if config file exists (when needed)
-# file_check "<config_file>"
+config_file_check "$HOME/.config/js-sync-dotfiles.conf"
 
 # Dependency evalutation
 deps_check "${deps_array[@]}"
-
-# Arguments number evaluation
-# args_check "$@"
-
-# Run script as root
-# run_as_root
 
 # Main function execution
 main "$@"

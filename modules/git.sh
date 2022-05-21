@@ -154,35 +154,6 @@ dotFilesCopy()
   echo -e "  $output"
 }
 
-sync_data()
-{
-  #
-  # contributor:  Julio Jiménez Delgado (jouleSoft)
-  # version:      0.1
-  # created:      20-05-2022
-  #
-  # dependencies: rsync
-  #
-  # arguments:
-  #    - '$1':    <source_file | source_directory>
-  #    - '$2':    <dest_directory>
-  #
-
-  # Sync the dotfiles directories recursively to the repo
-  rsync \
-    --verbose \
-    --info=stats1 \
-    --archive \
-    --update \
-    --recursive \
-    --backup \
-    --backup-dir="$2/backup" \
-    # Source
-    "$1" \
-    # Destination
-    "$2/" \
-}
-
 dotFilesCopy_legend()
 {
   # 
@@ -199,3 +170,4 @@ dotFilesCopy_legend()
   echo -e "  ${YELLOW}[   CP   ]${NC}: The dotFile has been copied"
   echo -e "  ${NC}[   NN   ]: Not Needed. The dotFile is not currently in the system"
 }
+
