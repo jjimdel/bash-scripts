@@ -44,6 +44,9 @@ gitCommit()
         echo "  [   --   ] push"
       fi
     fi
+
+    echo
+
   fi
 }
 
