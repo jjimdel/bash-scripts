@@ -231,6 +231,7 @@ print_help()
 
 check_arguments()
 {
+  declare check_df=""
   declare help=""
   declare sync=""
   declare sync_verbose=""
@@ -239,8 +240,9 @@ check_arguments()
     sync="true"
   fi
 
-  while getopts :hv options; do
+  while getopts :hvc options; do
     case "$options" in
+      c) check_df="true";;
       h) help="true";;
       v) sync_verbose="true";;
 
@@ -260,6 +262,13 @@ check_arguments()
   done
 
   shift $(($OPTIND-1))
+
+  if [ -n "$check_df" ]; then
+
+    dotFile_check_active
+    exit 0
+
+  fi
 
   if [ -n "$help" ]; then
 
@@ -296,6 +305,46 @@ check_arguments()
     exit 0
   fi
 
+  exit 11
+
+}
+
+# ===  FUNCTION  ====================================================
+#         NAME: dotFile_check_active
+#  DESCRIPTION: Check actives dotFiles
+#         TYPE: Operational
+# ===================================================================
+
+dotFile_check_active()
+{
+  #
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # created:      22-05-2022
+  #
+  # dependencies: coreutils [dirname]
+  #
+
+  declare current_dir=$(pwd)
+
+  # $dotFiles_repo declared at js-sync-dotfiles.conf
+  cd $dotFiles_repo || exit 1
+
+  #IFS=""
+
+  #for t in $(find|sed -e "s/./~/"); do
+  for t in ${dotFiles[@]}; do
+    if [ ! -e "$source/$t" ]; then
+      echo -e "${NC}[   NA   ] $t"
+    elif ! diff $t $source/$t > /dev/null 2>&1; then
+      echo -e "${YELLOW}[   CP   ] $t"
+    else
+      #dotFile currently active
+      echo -e "${LIGHT_GREEN}[   AC   ]${NC} $t"
+    fi
+  done
+
+  cd $current_dir || exit 1
 }
 
 # -------------------------------------------------------------------
