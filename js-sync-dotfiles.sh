@@ -56,7 +56,7 @@ MOD_DIR="$(dirname "$0")/modules"
 source "$MOD_DIR"/common.sh
 
 # shellcheck source=./modules/common.sh
-#source "$MOD_DIR"/git.sh
+source "$MOD_DIR"/git.sh
 
 # -------------------------------------------------------------------
 #   DECLARATIONS AND DEFINITIONS
@@ -138,8 +138,10 @@ sync_data()
 
   # Sync the dotfiles directories recursively to the repo
   rsync \
-    --info=stats1 \
+    --info=stats1,progress2 \
+    --human-readable \
     --archive \
+    --partial \
     --update \
     --recursive \
     --backup \
@@ -179,15 +181,19 @@ sync_data_verbose()
     fi
   done
 
+  echo
+
   for s in ${exclude[@]}; do
       echo "$s" >> /tmp/js-sync-dotfiles.exclude.tmp
   done
 
   # Sync the dotfiles directories recursively to the repo
   rsync \
-    --info=stats1 \
+    --info=stats2 \
+    --human-readable \
     --verbose \
     --archive \
+    --partial \
     --update \
     --recursive \
     --backup \
@@ -210,7 +216,7 @@ print_help()
     $script_name -h
 
   Options:
-    -q          Quiet output
+    -v          More detailed output (verbose)
 
     -h          Display this message"
 
@@ -230,13 +236,13 @@ check_arguments()
   declare sync_verbose=""
 
   if [ "$#" -eq 0 ]; then
-    sync_verbose="true"
+    sync="true"
   fi
 
-  while getopts :hq options; do
+  while getopts :hv options; do
     case "$options" in
       h) help="true";;
-      q) sync="true";;
+      v) sync_verbose="true";;
 
       :) echo -e "  -$OPTARG needs a value\n"
 
@@ -267,7 +273,11 @@ check_arguments()
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
 
-    sync_data $HOME/ $destination
+    sync_data $source $dotFiles_repo
+
+    echo
+
+    gitCheck_and_commit $dotFiles_repo
 
     exit 0
   fi
@@ -277,10 +287,15 @@ check_arguments()
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
 
-    sync_data_verbose $HOME/ $destination
+    sync_data_verbose $source $dotFiles_repo
+
+    echo
+
+    gitCheck_and_commit $dotFiles_repo
 
     exit 0
   fi
+
 }
 
 # -------------------------------------------------------------------
