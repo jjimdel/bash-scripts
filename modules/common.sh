@@ -120,7 +120,7 @@ header()
   #   - $3 - description
   #
 
-  echo -e "\n${LIGHT_GREY} $1 ${YELLOW}$2 ${LIGHT_GREY}- $3${NC}\n"
+  echo -e "\n${LIGHT_GREY}$1 ${YELLOW}$2 ${LIGHT_GREY}- $3${NC}\n"
 }
 
 #Argument control
