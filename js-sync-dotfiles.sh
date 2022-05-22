@@ -216,7 +216,10 @@ print_help()
     $script_name -h
 
   Options:
-    -v          More detailed output (verbose)
+    -c          Check active dotFiles (default)
+    -d          Get dotFiles differences
+    -s          Syncroize
+    -v          More detailed output durint sync (verbose)
 
     -h          Display this message"
 
@@ -231,19 +234,25 @@ print_help()
 
 check_arguments()
 {
-  declare check_df=""
-  declare help=""
-  declare sync=""
-  declare sync_verbose=""
+  declare sync_verbose="false"
+  declare sync="false"
 
   if [ "$#" -eq 0 ]; then
-    sync="true"
+
+  dotFile_check_active
+
   fi
 
-  while getopts :hvc options; do
+  while getopts :hvscd: options; do
     case "$options" in
-      c) check_df="true";;
-      h) help="true";;
+      c) dotFile_check_active;;
+      d)
+        echo -e "${YELLOW}differences in '$OPTARG' dotFile\n${NC}"
+
+        dotFile_get_diff $OPTARG
+        ;;
+      h) print_help; exit 0;;
+      s) sync="true";;
       v) sync_verbose="true";;
 
       :) echo -e "  -$OPTARG needs a value\n"
@@ -263,21 +272,7 @@ check_arguments()
 
   shift $(($OPTIND-1))
 
-  if [ -n "$check_df" ]; then
-
-    dotFile_check_active
-    exit 0
-
-  fi
-
-  if [ -n "$help" ]; then
-
-    print_help
-    exit 0
-
-  fi
-
-  if [ -n "$sync" ]; then
+  if [ "$sync" == "true" ] && [ "$sync_verbose" == "false" ]; then
 
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
@@ -288,10 +283,9 @@ check_arguments()
 
     gitCheck_and_commit $dotFiles_repo
 
-    exit 0
   fi
 
-  if [ -n "$sync_verbose" ]; then
+  if [ "$sync" == "true" ] && [ "$sync_verbose" == "true" ]; then
 
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
@@ -302,10 +296,7 @@ check_arguments()
 
     gitCheck_and_commit $dotFiles_repo
 
-    exit 0
   fi
-
-  exit 11
 
 }
 
@@ -346,7 +337,40 @@ dotFile_check_active()
 
   echo
 
+  dotFiles_check_active_legend
+
+  echo
+
   cd $current_dir || exit 1
+}
+
+dotFiles_check_active_legend()
+{
+  #
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.2
+  # created:      22-05-2022
+  #
+  # dependencies: coreutils
+  #
+
+  echo -e "${CYAN} Legend:${NC}\n"
+  echo -e "  ${LIGHT_GREEN}[   AC   ]${NC}: The dotFile is active in the system"
+  echo -e "  ${YELLOW}[   DF   ]${NC}: Differences between active and stored dotFile"
+  echo -e "  ${NC}[   NA   ]: Not Active. The dotFile is not currently in the system"
+}
+
+# ===  FUNCTION  ====================================================
+#         NAME: dotFile_get_diff
+#  DESCRIPTION: Get dotFiles differences
+#         TYPE: Operational
+# ===================================================================
+
+dotFile_get_diff()
+{
+  diff -r --color='always' --suppress-common-lines $dotFiles_repo/$1 $source/$1
+
+  [ "$?" -eq 0 ] && echo -e "${GREEN}None${NC}\n" || echo
 }
 
 # -------------------------------------------------------------------
