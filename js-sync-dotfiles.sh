@@ -129,8 +129,6 @@ sync_data()
   for s in ${dotFiles[@]}; do
     if [ -e "$HOME/$s" ]; then
       echo "$s" >> /tmp/js-sync-dotfiles.include.tmp
-    else
-      echo "Not found: $s"
     fi
   done
 
@@ -138,10 +136,8 @@ sync_data()
       echo "$s" >> /tmp/js-sync-dotfiles.exclude.tmp
   done
 
-
   # Sync the dotfiles directories recursively to the repo
   rsync \
-    --verbose \
     --info=stats1 \
     --archive \
     --update \
@@ -154,6 +150,53 @@ sync_data()
     "$2/"
 }
 
+# ===  FUNCTION  ====================================================
+#         NAME: sync_data_verbose
+#  DESCRIPTION: Sync data using rsync with detailed output
+#         TYPE: operational
+# ===================================================================
+
+sync_data_verbose()
+{
+  #
+  # contributor:  Julio Jiménez Delgado (jouleSoft)
+  # version:      0.1
+  # created:      20-05-2022
+  #
+  # dependencies: rsync
+  #
+  # arguments:
+  #    - '$1':    <source_directory>
+  #    - '$2':    <dest_directory>
+  #
+
+  # dotFilles array from js-sync-dotfiles.conf
+  for s in ${dotFiles[@]}; do
+    if [ -e "$HOME/$s" ]; then
+      echo "$s" >> /tmp/js-sync-dotfiles.include.tmp
+    else
+      echo "Not found: $s"
+    fi
+  done
+
+  for s in ${exclude[@]}; do
+      echo "$s" >> /tmp/js-sync-dotfiles.exclude.tmp
+  done
+
+  # Sync the dotfiles directories recursively to the repo
+  rsync \
+    --info=stats1 \
+    --verbose \
+    --archive \
+    --update \
+    --recursive \
+    --backup \
+    --backup-dir="$2/backup" \
+    --files-from=/tmp/js-sync-dotfiles.include.tmp \
+    --exclude-from=/tmp/js-sync-dotfiles.exclude.tmp \
+    "$1" \
+    "$2/"
+}
 
 # ===  FUNCTION  ====================================================
 #         NAME: print_help
@@ -167,6 +210,7 @@ print_help()
     $script_name -h
 
   Options:
+    -q          Quiet output
 
     -h          Display this message"
 
@@ -183,14 +227,16 @@ check_arguments()
 {
   declare help=""
   declare sync=""
+  declare sync_verbose=""
 
   if [ "$#" -eq 0 ]; then
-    sync="true"
+    sync_verbose="true"
   fi
 
-  while getopts :h options; do
+  while getopts :hq options; do
     case "$options" in
       h) help="true";;
+      q) sync="true";;
 
       :) echo -e "  -$OPTARG needs a value\n"
 
@@ -210,11 +256,14 @@ check_arguments()
   shift $(($OPTIND-1))
 
   if [ -n "$help" ]; then
+
     print_help
     exit 0
+
   fi
 
   if [ -n "$sync" ]; then
+
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
 
@@ -223,6 +272,15 @@ check_arguments()
     exit 0
   fi
 
+  if [ -n "$sync_verbose" ]; then
+
+    [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
+    [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
+
+    sync_data_verbose $HOME/ $destination
+
+    exit 0
+  fi
 }
 
 # -------------------------------------------------------------------
