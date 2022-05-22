@@ -337,12 +337,14 @@ dotFile_check_active()
     if [ ! -e "$source/$t" ]; then
       echo -e "${NC}[   NA   ] $t"
     elif ! diff $t $source/$t > /dev/null 2>&1; then
-      echo -e "${YELLOW}[   CP   ] $t"
+      echo -e "${YELLOW}[   DF   ] $t"
     else
       #dotFile currently active
       echo -e "${LIGHT_GREEN}[   AC   ]${NC} $t"
     fi
   done
+
+  echo
 
   cd $current_dir || exit 1
 }
