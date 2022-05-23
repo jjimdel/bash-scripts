@@ -39,7 +39,7 @@ declare description
 
 #Dependencies check array: used in the help screen for enumerating the missing dependencies
 #it will be completed in 'deps_check()' function
-declare -a deps_check_array
+declare -a deps_check_array=()
 
 #Dependencies array: used for checking the dependencies. It must be initialized in every script
 declare -a deps_array
@@ -120,7 +120,7 @@ header()
   #   - $3 - description
   #
 
-  echo -e "\n${LIGHT_GREY} $1 ${YELLOW}$2 ${LIGHT_GREY}- $3${NC}\n"
+  echo -e "\n${LIGHT_GREY}$1 ${YELLOW}$2 ${LIGHT_GREY}- $3${NC}\n"
 }
 
 #Argument control
@@ -243,7 +243,7 @@ config_file_check()
   #
 
   if [ ! -e "$1" ]; then
-    echo -e " configuration file not found\n"
+    echo -e " configuration file $1 not found\n"
     exit 1
   fi
 }

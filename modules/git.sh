@@ -25,7 +25,7 @@ gitCommit()
   if [ "$confirm" == "y" ] || [ "$confirm" == "Y" ]; then
 
     # if git add returns with 0, then if git commit returns 0
-    if git add . && git commit -m "authomatic backup" > /dev/null; then
+    if git add . && git commit -m "authomatic backup $(date +%F' '%H:%m)" > /dev/null; then
     echo -e "${LIGHT_GREEN}  [   OK   ]${NC} commit"
 
     # if git push returns 0
@@ -44,6 +44,9 @@ gitCommit()
         echo "  [   --   ] push"
       fi
     fi
+
+    echo
+
   fi
 }
 
@@ -154,17 +157,6 @@ dotFilesCopy()
   echo -e "  $output"
 }
 
-dotFiles_sync()
-{
-  # Copy the dotfiles directories recursively to the repo
-  rsync --verbose --info=stats1 --archive --update \
-    --recursive "$HOME/.config/$1" "$2/" \
-    --backup --backup-dir="$2/backup"
-  # Commit and push changes adding the current date
-
-  echo
-}
-
 dotFilesCopy_legend()
 {
   # 
@@ -181,3 +173,4 @@ dotFilesCopy_legend()
   echo -e "  ${YELLOW}[   CP   ]${NC}: The dotFile has been copied"
   echo -e "  ${NC}[   NN   ]: Not Needed. The dotFile is not currently in the system"
 }
+
