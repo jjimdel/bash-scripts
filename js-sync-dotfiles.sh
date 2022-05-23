@@ -220,6 +220,7 @@ print_help()
     -d          Get dotFiles differences
     -s          Syncroize
     -v          More detailed output durint sync (verbose)
+                Used with -s
 
     -h          Display this message"
 
@@ -277,7 +278,7 @@ check_arguments()
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
 
-    sync_data ""$source"" "$dotFiles_repo"
+    sync_data "$source" "$dotFiles_repo"
 
     echo
 
@@ -290,12 +291,17 @@ check_arguments()
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
 
-    sync_data_verbose "$source" $dotFiles_repo
+    sync_data_verbose "$source" "$dotFiles_repo"
 
     echo
 
-    gitCheck_and_commit $dotFiles_repo
+    gitCheck_and_commit "$dotFiles_repo"
 
+  fi
+
+  if [ "$sync" == "false" ] && [ "$sync_verbose" == "true" ]; then
+    print_help
+    exit 1
   fi
 
 }
@@ -316,10 +322,11 @@ dotFile_check_active()
   # dependencies: coreutils [dirname]
   #
 
-  declare current_dir=$(pwd)
+  declare current_dir
+  current_dir=$(pwd)
 
   # $dotFiles_repo declared at js-sync-dotfiles.conf
-  cd $dotFiles_repo || exit 1
+  cd "$dotFiles_repo" || exit 1
 
   #IFS=""
 
@@ -327,7 +334,7 @@ dotFile_check_active()
   for t in "${dotFiles[@]}"; do
     if [ ! -e "$source/$t" ]; then
       echo -e "${NC}[   NA   ] $t"
-    elif ! diff $t $source/$t > /dev/null 2>&1; then
+    elif ! diff "$t" "$source/$t" > /dev/null 2>&1; then
       echo -e "${YELLOW}[   DF   ] $t"
     else
       #dotFile currently active
@@ -341,7 +348,7 @@ dotFile_check_active()
 
   echo
 
-  cd $current_dir || exit 1
+  cd "$current_dir" || exit 1
 }
 
 dotFiles_check_active_legend()
@@ -368,9 +375,9 @@ dotFiles_check_active_legend()
 
 dotFile_get_diff()
 {
-  diff -r --color='always' --suppress-common-lines $dotFiles_repo/$1 $source/$1
-
-  [ "$?" -eq 0 ] && echo -e "${GREEN}None${NC}\n" || echo
+  diff -r --color='always' --suppress-common-lines "$dotFiles_repo/$1" "$source/$1" \
+    && echo -e "${GREEN}None${NC}\n" \
+    || echo
 }
 
 # -------------------------------------------------------------------
