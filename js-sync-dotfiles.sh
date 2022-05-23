@@ -74,7 +74,7 @@ deps_array=(
 )
 
 # Logging:
-log_dir="$(dirname $0)/log"
+#log_dir="$(dirname $0)/log"
 
 # Global operational variables
 # None
@@ -95,7 +95,7 @@ main()
 
   # log_header "$log_dir"
 
-  # shellcheck source=$HOME/.config/js-sync-dotfiles.conf.sh
+  # shellcheck source=$HOME/.config/js-sync-dotfiles.conf
   source "$HOME/.config/js-sync-dotfiles.conf"
 
   #Printing the header
@@ -126,13 +126,13 @@ sync_data()
   #
 
   # dotFilles array from js-sync-dotfiles.conf
-  for s in ${dotFiles[@]}; do
+  for s in "${dotFiles[@]}"; do
     if [ -e "$HOME/$s" ]; then
       echo "$s" >> /tmp/js-sync-dotfiles.include.tmp
     fi
   done
 
-  for s in ${exclude[@]}; do
+  for s in "${exclude[@]}"; do
       echo "$s" >> /tmp/js-sync-dotfiles.exclude.tmp
   done
 
@@ -173,7 +173,7 @@ sync_data_verbose()
   #
 
   # dotFilles array from js-sync-dotfiles.conf
-  for s in ${dotFiles[@]}; do
+  for s in "${dotFiles[@]}"; do
     if [ -e "$HOME/$s" ]; then
       echo "$s" >> /tmp/js-sync-dotfiles.include.tmp
     else
@@ -183,7 +183,7 @@ sync_data_verbose()
 
   echo
 
-  for s in ${exclude[@]}; do
+  for s in "${exclude[@]}"; do
       echo "$s" >> /tmp/js-sync-dotfiles.exclude.tmp
   done
 
@@ -249,7 +249,7 @@ check_arguments()
       d)
         echo -e "${YELLOW}differences in '$OPTARG' dotFile\n${NC}"
 
-        dotFile_get_diff $OPTARG
+        dotFile_get_diff "$OPTARG"
         ;;
       h) print_help; exit 0;;
       s) sync="true";;
@@ -270,18 +270,18 @@ check_arguments()
     esac
   done
 
-  shift $(($OPTIND-1))
+  shift $((OPTIND-1))
 
   if [ "$sync" == "true" ] && [ "$sync_verbose" == "false" ]; then
 
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
 
-    sync_data $source $dotFiles_repo
+    sync_data ""$source"" "$dotFiles_repo"
 
     echo
 
-    gitCheck_and_commit $dotFiles_repo
+    gitCheck_and_commit "$dotFiles_repo"
 
   fi
 
@@ -290,7 +290,7 @@ check_arguments()
     [ -f /tmp/js-sync-dotfiles.include.tmp ] && rm -f /tmp/js-sync-dotfiles.include.tmp
     [ -f /tmp/js-sync-dotfiles.exclude.tmp ] && rm -f /tmp/js-sync-dotfiles.exclude.tmp
 
-    sync_data_verbose $source $dotFiles_repo
+    sync_data_verbose "$source" $dotFiles_repo
 
     echo
 
@@ -324,7 +324,7 @@ dotFile_check_active()
   #IFS=""
 
   #for t in $(find|sed -e "s/./~/"); do
-  for t in ${dotFiles[@]}; do
+  for t in "${dotFiles[@]}"; do
     if [ ! -e "$source/$t" ]; then
       echo -e "${NC}[   NA   ] $t"
     elif ! diff $t $source/$t > /dev/null 2>&1; then
