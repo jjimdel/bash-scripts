@@ -99,6 +99,7 @@ main()
 
   for r in ${repo_dir_array[@]}; do
     cd "$r"
+    git fetch -q > /dev/null || exit 1
  
     if [ $(git status --short | wc -c) != 0 ]; then
       echo -e "${YELLOW}  [   CK   ]${NC} $r"
