@@ -99,13 +99,14 @@ main()
   echo -e "${CYAN} Status of every repository:${NC}\n"
 
   for r in "${repo_dir_array[@]}"; do
-    cd "$r"
+    cd "$r" 2> /dev/null || continue
+
     if ! git fetch -q > /dev/null 2>&1; then
       echo -e "  [   --   ] $r"
       continue
     fi
  
-    if [ $(git status --short | wc -c) != 0 ]; then
+    if [ "$(git status --short | wc -c)" != 0 ]; then
       echo -e "${YELLOW}  [   CK   ]${NC} $r"
     else
       echo -e "${LIGHT_GREEN}  [   OK   ]${NC} $r"
@@ -126,9 +127,6 @@ main()
 
 #Printing the header
 header "$script_name" "$version" "$description"
-
-#Check if config file exists (when needed)
-config_file_check "$HOME/.config/js-check-repo.conf.sh"
 
 #Dependecy evaluation
 deps_check "${deps_array[@]}"
