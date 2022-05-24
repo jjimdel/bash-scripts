@@ -7,6 +7,9 @@
 # Description
 #   Check every Git repository from a list
 #
+# Version
+#   0.2
+#
 # Contributor
 #   Julio Jimenez Delgado (jouleSoft)
 #
@@ -15,7 +18,7 @@
 #
 # License
 #   The MIT License (MIT)
-#   Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
+#   Copyright (c) 2021-2022 Julio Jiménez Delgado (jouleSoft)
 #
 # Template
 #   https://github.com/jouleSoft/bash-scripts/templates/noargs.sh 
@@ -27,18 +30,40 @@
 #   ~/.config/js-check-repo.conf.sh
 #
 
-#### [MODULES] ####
+# -------------------------------------------------------------------
+#   BASH REQUIREMENTS
+# -------------------------------------------------------------------
+#
+# -e             Scripts stops on error (return != 0)
+# -u             Error if undefined variable
+# -x             Output every line (debug mode)
+# -o pipefail    Script fails if one of the piped commands fails
+# -o posix       Causes Bash to match the standard when the
+#                default operation differs from the Posix standard
 
-. $HOME/workspace/bash-scripts/modules/common.sh
+set -eu -o pipefail -o posix
 
-#Configuration module
-. $HOME/.config/js-check-repo.conf.sh
+# -------------------------------------------------------------------
+#   MODULE IMPORTS
+# -------------------------------------------------------------------
 
-#### [DECLARATIONS AND DEFINITIONS] ####
+# Modules path
+declare MOD_DIR
+MOD_DIR="$(dirname "$0")/modules"
+
+# shellcheck source=./modules/common.sh
+source "$MOD_DIR"/common.sh
+
+# shellcheck source=./modules/git.sh
+source "$MOD_DIR"/git.sh
+
+# -------------------------------------------------------------------
+#   DECLARATIONS AND DEFINITIONS
+# -------------------------------------------------------------------
 
 #Script info and arguments evaluation variables
 declare script_name="js-check-repo.sh"
-declare version="0.1"
+declare version="0.2"
 declare description="Check every Git repository from a list"
 
 #Dependencies array: used for checking the dependencies.
@@ -50,20 +75,31 @@ deps_array=(
 #Global operational variables
 # NONE
 
-#### [FUNCTIONS] ####
+# -------------------------------------------------------------------
+#   FUNCTIONS
+# -------------------------------------------------------------------
 
-#Operational functions (if required)
-# NONE
+# ===  FUNCTION  ====================================================
+#         NAME: Main
+#  DESCRIPTION: Main function
+#         TYPE: Main
+# ===================================================================
 
-#Main function
 main()
 {
+  # Configuration file
+  config_file_check $HOME/.config/js-check-repo.conf
+
+  # shellcheck source=$HOME/.config/js-check-repo.conf
+  source $HOME/.config/js-check-repo.conf
+
   declare currentDir="$(pwd)"
 
   echo -e "${CYAN} Status of every repository:${NC}\n"
 
   for r in ${repo_dir_array[@]}; do
     cd "$r"
+    git fetch -q > /dev/null || exit 1
  
     if [ $(git status --short | wc -c) != 0 ]; then
       echo -e "${YELLOW}  [   CK   ]${NC} $r"
@@ -79,7 +115,9 @@ main()
   echo -e "  ${YELLOW}[   CK   ]${NC}: The repo needs to be checked\n"
 }
 
-#### [EXECUTION] ####
+# -------------------------------------------------------------------
+#   EXECUTION
+# -------------------------------------------------------------------
 
 #Printing the header
 header "$script_name" "$version" "$description"
@@ -93,7 +131,9 @@ deps_check ${deps_array[@]}
 #Main function execution
 main
 
-#### [FINALIZATION] ####
+# -------------------------------------------------------------------
+#   FINALIZATION
+# -------------------------------------------------------------------
 
 #Unset common.sh module variables
 common_unset
