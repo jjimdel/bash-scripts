@@ -27,7 +27,7 @@
 #   git
 #
 # Configuration files needed
-#   ~/.config/js-check-repo.conf.sh
+#   ~/.config/js-repo-check.conf
 #
 
 # -------------------------------------------------------------------
@@ -88,16 +88,17 @@ deps_array=(
 main()
 {
   # Configuration file
-  config_file_check $HOME/.config/js-check-repo.conf
+  config_file_check "$HOME/.config/js-repo-check.conf"
 
   # shellcheck source=$HOME/.config/js-check-repo.conf
-  source $HOME/.config/js-check-repo.conf
+  source "$HOME/.config/js-repo-check.conf"
 
-  declare currentDir="$(pwd)"
+  declare currentDir
+  currentDir="$(pwd)"
 
   echo -e "${CYAN} Status of every repository:${NC}\n"
 
-  for r in ${repo_dir_array[@]}; do
+  for r in "${repo_dir_array[@]}"; do
     cd "$r"
     if ! git fetch -q > /dev/null 2>&1; then
       echo -e "  [   --   ] $r"
@@ -130,7 +131,7 @@ header "$script_name" "$version" "$description"
 config_file_check "$HOME/.config/js-check-repo.conf.sh"
 
 #Dependecy evaluation
-deps_check ${deps_array[@]}
+deps_check "${deps_array[@]}"
 
 #Main function execution
 main
