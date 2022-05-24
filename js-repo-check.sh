@@ -57,9 +57,6 @@ source "$MOD_DIR"/common.sh
 # shellcheck source=./modules/git.sh
 source "$MOD_DIR"/git.sh
 
-#Configuration module
-. $HOME/.config/js-check-repo.conf.sh
-
 # -------------------------------------------------------------------
 #   DECLARATIONS AND DEFINITIONS
 # -------------------------------------------------------------------
@@ -90,6 +87,12 @@ deps_array=(
 
 main()
 {
+  # Configuration file
+  config_file_check $HOME/.config/js-check-repo.conf
+
+  # shellcheck source=$HOME/.config/js-check-repo.conf
+  source $HOME/.config/js-check-repo.conf
+
   declare currentDir="$(pwd)"
 
   echo -e "${CYAN} Status of every repository:${NC}\n"
