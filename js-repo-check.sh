@@ -7,6 +7,9 @@
 # Description
 #   Check every Git repository from a list
 #
+# Version
+#   1.0
+#
 # Contributor
 #   Julio Jimenez Delgado (jouleSoft)
 #
@@ -15,7 +18,7 @@
 #
 # License
 #   The MIT License (MIT)
-#   Copyright (c) 2021 Julio Jiménez Delgado (jouleSoft)
+#   Copyright (c) 2021-2022 Julio Jiménez Delgado (jouleSoft)
 #
 # Template
 #   https://github.com/jouleSoft/bash-scripts/templates/noargs.sh 
@@ -27,14 +30,32 @@
 #   ~/.config/js-check-repo.conf.sh
 #
 
-#### [MODULES] ####
+# -------------------------------------------------------------------
+#   BASH REQUIREMENTS
+# -------------------------------------------------------------------
+#
+# -e             Scripts stops on error (return != 0)
+# -u             Error if undefined variable
+# -x             Output every line (debug mode)
+# -o pipefail    Script fails if one of the piped commands fails
+# -o posix       Causes Bash to match the standard when the
+#                default operation differs from the Posix standard
 
+set -eu -o pipefail -o posix
+
+# -------------------------------------------------------------------
+#   MODULE IMPORTS
+# -------------------------------------------------------------------
+
+# Modules path
 . $HOME/workspace/bash-scripts/modules/common.sh
 
 #Configuration module
 . $HOME/.config/js-check-repo.conf.sh
 
-#### [DECLARATIONS AND DEFINITIONS] ####
+# -------------------------------------------------------------------
+#   DECLARATIONS AND DEFINITIONS
+# -------------------------------------------------------------------
 
 #Script info and arguments evaluation variables
 declare script_name="js-check-repo.sh"
@@ -50,12 +71,16 @@ deps_array=(
 #Global operational variables
 # NONE
 
-#### [FUNCTIONS] ####
+# -------------------------------------------------------------------
+#   FUNCTIONS
+# -------------------------------------------------------------------
 
-#Operational functions (if required)
-# NONE
+# ===  FUNCTION  ====================================================
+#         NAME: Main
+#  DESCRIPTION: Main function
+#         TYPE: Main
+# ===================================================================
 
-#Main function
 main()
 {
   declare currentDir="$(pwd)"
@@ -79,7 +104,9 @@ main()
   echo -e "  ${YELLOW}[   CK   ]${NC}: The repo needs to be checked\n"
 }
 
-#### [EXECUTION] ####
+# -------------------------------------------------------------------
+#   EXECUTION
+# -------------------------------------------------------------------
 
 #Printing the header
 header "$script_name" "$version" "$description"
@@ -93,7 +120,9 @@ deps_check ${deps_array[@]}
 #Main function execution
 main
 
-#### [FINALIZATION] ####
+# -------------------------------------------------------------------
+#   FINALIZATION
+# -------------------------------------------------------------------
 
 #Unset common.sh module variables
 common_unset
