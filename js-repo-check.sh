@@ -48,7 +48,14 @@ set -eu -o pipefail -o posix
 # -------------------------------------------------------------------
 
 # Modules path
-. $HOME/workspace/bash-scripts/modules/common.sh
+declare MOD_DIR
+MOD_DIR="$(dirname "$0")/modules"
+
+# shellcheck source=./modules/common.sh
+source "$MOD_DIR"/common.sh
+
+# shellcheck source=./modules/git.sh
+source "$MOD_DIR"/git.sh
 
 #Configuration module
 . $HOME/.config/js-check-repo.conf.sh
