@@ -99,7 +99,10 @@ main()
 
   for r in ${repo_dir_array[@]}; do
     cd "$r"
-    git fetch -q > /dev/null || exit 1
+    if ! git fetch -q > /dev/null 2>&1; then
+      echo -e "  [   --   ] $r"
+      continue
+    fi
  
     if [ $(git status --short | wc -c) != 0 ]; then
       echo -e "${YELLOW}  [   CK   ]${NC} $r"
@@ -112,7 +115,8 @@ main()
 
   echo -e "${CYAN} Legend:${NC}\n"
   echo -e "  ${LIGHT_GREEN}[   OK   ]${NC}: The repo is up to date"
-  echo -e "  ${YELLOW}[   CK   ]${NC}: The repo needs to be checked\n"
+  echo -e "  ${YELLOW}[   CK   ]${NC}: The repo needs to be checked"
+  echo -e "  [   CK   ]: It is not a repo\n"
 }
 
 # -------------------------------------------------------------------
