@@ -8,7 +8,7 @@
 #   Check every Git repository from a list
 #
 # Version
-#   1.0
+#   0.2
 #
 # Contributor
 #   Julio Jimenez Delgado (jouleSoft)
@@ -63,7 +63,7 @@ source "$MOD_DIR"/git.sh
 
 #Script info and arguments evaluation variables
 declare script_name="js-check-repo.sh"
-declare version="0.1"
+declare version="0.2"
 declare description="Check every Git repository from a list"
 
 #Dependencies array: used for checking the dependencies.
