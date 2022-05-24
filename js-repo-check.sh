@@ -99,7 +99,8 @@ main()
   echo -e "${CYAN} Status of every repository:${NC}\n"
 
   for r in "${repo_dir_array[@]}"; do
-    cd "$r"
+    cd "$r" 2> /dev/null || continue
+
     if ! git fetch -q > /dev/null 2>&1; then
       echo -e "  [   --   ] $r"
       continue
