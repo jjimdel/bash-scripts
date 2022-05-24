@@ -106,7 +106,7 @@ main()
       continue
     fi
  
-    if [ $(git status --short | wc -c) != 0 ]; then
+    if [ "$(git status --short | wc -c)" != 0 ]; then
       echo -e "${YELLOW}  [   CK   ]${NC} $r"
     else
       echo -e "${LIGHT_GREEN}  [   OK   ]${NC} $r"
