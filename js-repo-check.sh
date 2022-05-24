@@ -88,12 +88,13 @@ deps_array=(
 main()
 {
   # Configuration file
-  config_file_check $HOME/.config/js-check-repo.conf
+  config_file_check "$HOME/.config/js-repo-check.conf"
 
   # shellcheck source=$HOME/.config/js-check-repo.conf
   source "$HOME/.config/js-repo-check.conf"
 
-  declare currentDir="$(pwd)"
+  declare currentDir
+  currentDir="$(pwd)"
 
   echo -e "${CYAN} Status of every repository:${NC}\n"
 
