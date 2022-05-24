@@ -127,9 +127,6 @@ main()
 #Printing the header
 header "$script_name" "$version" "$description"
 
-#Check if config file exists (when needed)
-config_file_check "$HOME/.config/js-check-repo.conf.sh"
-
 #Dependecy evaluation
 deps_check "${deps_array[@]}"
 
