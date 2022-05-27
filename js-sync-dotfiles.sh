@@ -218,7 +218,7 @@ print_help()
   Options:
     -c          Check active dotFiles (default)
     -d          Get dotFiles differences
-    -s          Syncroize
+    -s          Syncronize
     -v          More detailed output durint sync (verbose)
                 Used with -s
 
