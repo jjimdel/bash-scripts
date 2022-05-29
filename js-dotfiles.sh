@@ -99,25 +99,22 @@ main()
   # log_header "$log_dir"
 
   # shellcheck source=/dev/null
-  source "$HOME/.config/js-sync-dotfiles.conf"
+  source "$HOME/.config/js-dotfiles.conf"
 
   [ -f /tmp/js-dotfiles.include.tmp ] && rm -f /tmp/js-dotfiles.include.tmp
   [ -f /tmp/js-dotfiles.exclude.tmp ] && rm -f /tmp/js-dotfiles.exclude.tmp
 
-  # dotFilles array from js-sync-dotfiles.conf
+  # dotFilles array from js-dotfiles.conf
   for s in "${dotFiles[@]}"; do
     if [ -e "$HOME/$s" ]; then
       echo "$s" >> /tmp/js-dotfiles.include.tmp
     fi
   done
 
-  # exclude array from js-sync-dotfiles.conf
+  # exclude array from js-dotfiles.conf
   for s in "${exclude[@]}"; do
       echo "$s" >> /tmp/js-dotfiles.exclude.tmp
   done
-
-  #Printing the header
-  header "$script_name" "$version" "$description"
 
   check_arguments "$@"
 }
@@ -168,6 +165,20 @@ check_arguments()
         ;;
       h) print_help; exit 0;;
       v) sync_verbose="true";;
+      V)
+        #Printing the header
+        header "$script_name" "$version" "$description"
+
+        echo -e "License"
+        echo -e "  The MIT License (MIT)"
+        echo -e "  Copyright (c) 2022 Julio Jimenez Delgado (jouleSoft)\n"
+        echo -e "GitHub"
+        echo -e "  https://github.com/jouleSoft/bash-scripts.git\n"
+        # License
+        #   The MIT License (MIT)
+        #   Copyright (c) 2022 Julio Jimenez Delgado (jouleSoft)
+        #
+      ;;
 
       :) echo -e "  -$OPTARG needs a value\n"
 
@@ -219,31 +230,40 @@ dotFile_check_active()
   declare current_dir
   current_dir=$(pwd)
 
-  # $dotFiles_repo declared at js-sync-dotfiles.conf
+  # $dotFiles_repo declared at js-dotfiles.conf
   cd "$dotFiles_repo" || exit 1
 
   #IFS=""
 
-  #for t in $(find|sed -e "s/./~/"); do
+  echo -e "\n${CYAN} Checking dotFiles${NC}\n"
+
   for t in "${dotFiles[@]}"; do
-    if [ ! -e "$source/$t" ]; then
-      echo -e "${NC}[   NA   ] $t"
+    if [ ! -e "$t" ]; then
+      echo -e "  ${RED}[   WA   ] $t"
+
+      if [ -e "$source/$t" ]; then
+        diffs="true"
+        diffs_array+=("$t")
+      fi
+
+    elif [ ! -e "$source/$t" ]; then
+      echo -e "  ${NC}[   NA   ] $t"
 
     elif ! diff "$t" "$source/$t" > /dev/null 2>&1; then
-      echo -e "${YELLOW}[   DF   ] $t"
+      echo -e "  ${YELLOW}[   DF   ] $t"
 
       diffs="true"
       diffs_array+=("$t")
 
     elif [ "$(diff -r --suppress-common-lines --exclude-from="/tmp/js-dotfiles.exclude.tmp" "$t" "$source/$t" | wc -l)" -gt 0 ]; then
-      echo -e "${ORANGE}[   CK   ] $t"
+      echo -e "  ${ORANGE}[   CK   ] $t"
 
       diffs="true"
       diffs_array+=("$t")
 
     else
       #dotFile currently active
-      echo -e "${LIGHT_GREEN}[   AC   ]${NC} $t"
+      echo -e "  ${LIGHT_GREEN}[   AC   ]${NC} $t"
 
     fi
   done
@@ -308,6 +328,7 @@ dotFiles_check_active_legend()
   echo -e "  ${LIGHT_GREEN}[   AC   ]${NC}: The dotFile is active in the system"
   echo -e "  ${YELLOW}[   DF   ]${NC}: Differences between active and stored dotFile"
   echo -e "  ${ORANGE}[   CK   ]${NC}: Differences between active and stored dotFile. Stored need to be checked"
+  echo -e "  ${RED}[   WA   ]${NC}: Warinig. The dotFiles aren't in the store repo"
   echo -e "  ${NC}[   --   ]: Not Active. The dotFile is not currently in the system"
 }
 
@@ -380,7 +401,7 @@ sync_data_verbose()
   #    - '$2':    <dest_directory>
   #
 
-  # dotFilles array from js-sync-dotfiles.conf
+  # dotFilles array from js-dotfiles.conf
   for s in "${dotFiles[@]}"; do
     if [ -e "$HOME/$s" ]; then
       echo "$s" >> /tmp/js-dotfiles.include.tmp
@@ -418,7 +439,7 @@ sync_data_verbose()
 # -------------------------------------------------------------------
 
 # Check if config file exists (when needed)
-config_file_check "$HOME/.config/js-sync-dotfiles.conf"
+config_file_check "$HOME/.config/js-dotfiles.conf"
 
 # Dependency evalutation
 deps_check "${deps_array[@]}"
