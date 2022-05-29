@@ -8,7 +8,7 @@
 #   Sync dotfiles against git repository
 #
 # Version
-#   1.0
+#   1.1
 #
 # Contributor
 #   Julio Jimenez Delgado (jouleSoft)
@@ -64,7 +64,7 @@ source "$MOD_DIR"/git.sh
 
 # Script info
 script_name="js-sync-dotfiles.sh"
-version="1.0"
+version="1.1"
 description="Sync dotfiles against git repository"
 
 # Dependencies array: used for checking the dependencies.
