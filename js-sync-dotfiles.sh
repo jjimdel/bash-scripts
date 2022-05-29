@@ -95,7 +95,7 @@ main()
 
   # log_header "$log_dir"
 
-  # shellcheck source=$HOME/.config/js-sync-dotfiles.conf
+  # shellcheck source=/dev/null
   source "$HOME/.config/js-sync-dotfiles.conf"
 
   #Printing the header
