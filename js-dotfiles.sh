@@ -247,7 +247,7 @@ dotFile_check_active()
       fi
 
     elif [ ! -e "$source/$t" ]; then
-      echo -e "  ${NC}[   NA   ] $t"
+      echo -e "  ${NC}[   --   ] $t"
 
     elif ! diff "$t" "$source/$t" > /dev/null 2>&1; then
       echo -e "  ${YELLOW}[   DF   ] $t"
